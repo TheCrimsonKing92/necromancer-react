@@ -48,7 +48,9 @@
 }
 
 #main, #footer {
-  padding-left: 1vw;
+  box-sizing: border-box;
+  padding-left: 0.5vw;
+  padding-right: 0.5vw;
   padding-bottom: 1vh;
 }
 
@@ -62,6 +64,7 @@
 
 #footer {
   border-top: 1px solid black;
+  min-height: 2vh;
 }
 
 #game-title {
