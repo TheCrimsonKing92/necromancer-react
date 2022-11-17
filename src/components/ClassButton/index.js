@@ -3,9 +3,8 @@ import React from 'react';
 import SelectableButton from '../SelectableButton';
 
 const ClassButton = props => {
-    console.log('Got class props: ', props);
-    let { theClass, setClass, ...remainder } = props;
-    let { key, name } = theClass;
+    const { theClass, setClass, ...remainder } = props;
+    const { key, name } = theClass;
 
     const id = `${key}-class`;
 
