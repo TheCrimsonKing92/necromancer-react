@@ -1,0 +1,21 @@
+export const ADD_SKILL = "ADD_SKILL";
+export const CHANGE_SCENE = "CHANGE_SCENE";
+export const DISPLAY_CLASS = "DISPLAY_CLASS";
+export const DISPLAY_SKILL = "DISPLAY_SKILL";
+export const LOAD_GAME = "LOAD_GAME";
+export const NEW_GAME = "NEW_GAME";
+export const SELECT_SKILL = "SELECT_SKILL";
+export const SET_CLASS = "SET_CLASS";
+
+const ACTIONS = {
+    [ADD_SKILL]: ADD_SKILL,
+    [CHANGE_SCENE]: CHANGE_SCENE,
+    [DISPLAY_CLASS]: DISPLAY_CLASS,
+    [DISPLAY_SKILL]: DISPLAY_SKILL,
+    [LOAD_GAME]: LOAD_GAME,
+    [NEW_GAME]: NEW_GAME,
+    [SELECT_SKILL]: SELECT_SKILL,
+    [SET_CLASS]: SET_CLASS
+};
+
+export default ACTIONS;

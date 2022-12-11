@@ -1,13 +1,3 @@
-.App {
-  margin-left: 0.25vw;
-  margin-top: 0.5vh;
-  width: 40vw;
-  border: 1px solid black;
-  text-align: left;
-  display: flex;
-  flex-direction: column;
-}
-
 .App-logo {
   height: 40vmin;
   pointer-events: none;
@@ -49,6 +39,7 @@
 
 #main, #footer {
   box-sizing: border-box;
+  padding-top: 1vh;
   padding-left: 0.5vw;
   padding-right: 0.5vw;
   padding-bottom: 1vh;
@@ -59,11 +50,15 @@
   width: 100%;
   align-items: center;
   justify-content: center;
-  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
+  border-top: 1px solid black;
 }
 
 #footer {
-  border-top: 1px solid black;
+  border-bottom: 1px solid black;
+  border-left: 1px solid black;
+  border-right: 1px solid black;
   min-height: 2vh;
 }
 
@@ -71,6 +66,10 @@
   display: inline-block;
   margin-left: 1vw;
   margin-top: 2vh;
+}
+
+#main {
+  border: 1px solid black;
 }
 
 .class-button, .standard-button, .standard-div-button {    

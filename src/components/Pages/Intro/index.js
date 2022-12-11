@@ -14,7 +14,7 @@ const Intro = props => {
                 Click below to choose your class and begin the game. Classes start with access to unique abilities and small existing faction ties, but otherwise
                 have little effect on the overall course of gameplay.
             </p>
-            <button type="button" className="hover-pointer standard-button" onClick={() => navigate('/new')}>
+            <button type="button" className="hover-pointer standard-button" onClick={() => navigate('/game')}>
                 Start!
             </button>
         </>

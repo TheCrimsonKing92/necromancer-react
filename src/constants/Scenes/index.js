@@ -1,0 +1,9 @@
+export const CHOOSE_CLASS = "CHOOSE_CLASS";
+export const CHOOSE_SKILL = "CHOOSE_SKILL";
+
+const SCENES = {
+    [CHOOSE_CLASS]: CHOOSE_CLASS,
+    [CHOOSE_SKILL]: CHOOSE_SKILL
+};
+
+export default SCENES;

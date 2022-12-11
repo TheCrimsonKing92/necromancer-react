@@ -1,28 +1,30 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
 
 const SelectableButton = props => {
+    const { onClick, onMouseOver, onMouseOut, onSelected, selected } = props;
     let classes = "hover-pointer";
 
     if (props.classes !== null && props.classes !== "") {
         classes = `${classes} ${props.classes}`;
     }
 
-    if (props.selected) {
+    if (selected) {
         classes = `${classes} selected-box`;
     }
 
     const myClick = () => {
-        if (props.onSelected) {
-            props.onSelected();
+        if (onSelected) {
+            onSelected();
         }
 
-        props.onClick();
-    }
+        onClick();
+    };
 
     return (
-        <div id={props.id} className={classes} onClick={myClick}>
+        <Button id={props.id} variant={"dark"} onClick={myClick} onMouseOver={onMouseOver} onMouseOut={onMouseOut}>
             { props.children }
-        </div>
+        </Button>
     )
 };
 

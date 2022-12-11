@@ -1,4 +1,5 @@
 import React from 'react';
+import Container from 'react-bootstrap/Container';
 
 const Footer = ({ content }) => {
     const hasContent = content !== null;
@@ -16,10 +17,12 @@ const Footer = ({ content }) => {
 
     return (
         <footer id="footer">
-            <p style={infoStyles}>
-                <strong>Info</strong>
-            </p>
-            { hasContent && content}
+            <Container>
+                <p style={infoStyles}>
+                    <strong>Info</strong>
+                </p>
+                { hasContent && content}
+            </Container>            
         </footer>
     )
 };

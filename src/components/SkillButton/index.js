@@ -1,65 +1,16 @@
 import React from 'react';
-import SkillDescription from '../SkillDescription';
+import Button from 'react-bootstrap/Button';
 
 const SkillButton = props => {
-    const { setFooter, skill } = props;
+    const { displaySkill, selectSkill, skill } = props;
     const { name } = skill;
 
-    const bindSetFooter = skill => {
-        return () => {
-            setFooter(
-                <SkillDescription skill={props.skill} />
-            );
-        };
-    };
-
-    const mySetFooter = bindSetFooter(skill);
-    const resetFooter = () => setFooter(null);
-
-    const getClasses = nameParts => {
-        let classList = ['skill-button', 'hover-pointer'];
-        
-        if (nameParts.length === 1) {
-            classList.push('skill-button-single-word');
-        }
-        
-        return classList.join(' ');
-    };
-
-    const getContent = nameParts => {
-        if (nameParts.length === 1) {
-            return nameParts[0];
-        }
-
-        const copy = [];
-
-        for (let i = 0; i < nameParts.length; i++) {
-            const current = nameParts[i];
-            copy.push(current);
-            
-            if (i < (nameParts.length - 1)) {
-                copy.push(<br />);
-            }
-        }
-
-        return copy;
-    };
-
-    const nameParts = name.split(' ');
-
-    let styles = {};
-
-    if (nameParts.length > 1) {
-        styles.lineHeight = (50 / nameParts.length) + 'px';
-    }
-
-    const classes = getClasses(nameParts);
-    const content = getContent(nameParts);
+    const onClick = () => selectSkill(skill);
+    const resetContent = () => displaySkill(null);
+    const setContent = () => displaySkill(skill);
 
     return (
-        <div className={classes} onClick={mySetFooter} onMouseOver={mySetFooter} onMouseOut={resetFooter} style={styles}>
-            { content }
-        </div>
+        <Button variant="secondary" onClick={onClick} onMouseOver={setContent} onMouseOut={resetContent} style={{ minHeight: "62px" }}>{ name }</Button>
     );
 };
 
