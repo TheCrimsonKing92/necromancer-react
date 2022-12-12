@@ -1,0 +1,17 @@
+{
+    "compilerOptions": {
+        // To which level of JS features should the compiler down-level?
+        "target": "ES6",
+        // Allow TypeScript to handle JSX
+        "jsx": "react",
+        // Allow default imports from JS modules
+        "esModuleInterop": true,
+        // Don't emit TypeScript files when there are compilation errors
+        "noEmit": true,
+        // What module system is used in the project?
+        "module": "ESNext",
+        // How should the compiler resolve modules?
+        "moduleResolution": "Node"
+    },
+    "include": ["src"]
+}
