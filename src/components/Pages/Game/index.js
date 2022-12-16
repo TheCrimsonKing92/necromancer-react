@@ -8,16 +8,15 @@ import SCENES from '../../../constants/Scenes';
 
 const { CHOOSE_CLASS, CHOOSE_SKILL } = SCENES;
 
-const Game = props => {
-    const { dispatch } = props;
-    const { scene } = props.game;
+const Game = ({ dispatch, game }) => {
+    const { scene } = game;
 
     const chooseScene = scene => {
         switch(scene) {
             case CHOOSE_CLASS:
                 return <NewGame classes={Object.values(Classes)} dispatch={dispatch}/>;
             case CHOOSE_SKILL:                
-                const { player } = props.game;
+                const { player } = game;
                 const className = player.class.name;
                 const firstTimeSkills = Object.keys(player.skills).length === 0;
                 return <SkillSelection className={className} dispatch={dispatch} firstTimeSkills={firstTimeSkills} />;
