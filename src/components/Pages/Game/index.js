@@ -6,7 +6,7 @@ import SkillSelection from './SkillSelection';
 import Classes from '../../../constants/Classes';
 import SCENES from '../../../constants/Scenes';
 
-const { CHOOSE_CLASS, CHOOSE_SKILL } = SCENES;
+const { CHOOSE_CLASS, CHOOSE_SKILL, WORLD_MAP } = SCENES;
 
 const Game = ({ dispatch, game }) => {
     const { scene } = game;
@@ -20,6 +20,8 @@ const Game = ({ dispatch, game }) => {
                 const className = player.class.name;
                 const firstTimeSkills = Object.keys(player.skills).length === 0;
                 return <SkillSelection className={className} dispatch={dispatch} firstTimeSkills={firstTimeSkills} />;
+            case WORLD_MAP:
+                return <p>We're not ready to work with the world map yet.</p>
             default:
                 return <p>I don't know what kinda scene you're tryna make here ({scene})</p>
         }
