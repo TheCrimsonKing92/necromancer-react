@@ -1,8 +1,7 @@
-import React, { useReducer } from 'react';
+import React from 'react';
 import {
     Route,
-    Routes,
-    useNavigate
+    Routes
 } from 'react-router-dom';
 
 import Game from '../Pages/Game';
