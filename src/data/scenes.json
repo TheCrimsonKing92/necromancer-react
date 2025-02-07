@@ -1,0 +1,13 @@
+{
+    "id": "necromancer",
+    "initial": "start",
+    "states": {
+        "start": {
+            "type": "decision",
+            "text": "Welcome to Necromancer! Choose your class."
+        },
+        "battle": {
+            "type": "battle"
+        }
+    }
+}
