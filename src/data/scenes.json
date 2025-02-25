@@ -1,10 +1,39 @@
 {
     "id": "necromancer",
-    "initial": "start",
+    "initial": "character_creation",
     "states": {
-        "start": {
-            "type": "decision",
-            "text": "Welcome to Necromancer! Choose your class."
+        "character_creation": {
+            "id": "character_creation",
+            "type": "selection",
+            "text": "Choose your path. Who will you become?",
+            "options": [
+                {
+                    "text": "Medium",
+                    "characterClass": "medium",
+                    "description": "A channeler of spirits, the medium uses ritualistic possession to achieve higher powers and reveal hidden information.",
+                    "next": "intro"
+                },
+                {
+                    "text": "Summoner",
+                    "characterClass": "summoner",
+                    "description": "Summoners manifest spirits of the dead in the physical realm, raising unflinching soldiers.",
+                    "next": "intro"
+                },
+                {
+                    "text": "Thaumaturgist",
+                    "characterClass": "thaumaturgist",
+                    "description": "Shrouded in secrecy, a thaumaturgist is one who uses exotic, morbid ingredients to concoct an astounding array of magical items.",
+                    "next": "intro"
+                }
+            ]            
+        },
+        "intro": {
+            "id": "intro",
+            "type": "text",
+            "text": "You awaken in a dark chamber, echoes of the past swirling in your mind. You take your first steps into the unknown.",
+            "options": [
+                { "text": "Step forward", "next": "first_choice" }
+            ]
         },
         "battle": {
             "type": "battle"

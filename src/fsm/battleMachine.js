@@ -1,15 +1,13 @@
 import { createMachine, assign } from 'xstate';
 
-export function createBattleMachine({ enemies, environment, originScene }) {
+export function createBattleMachine({ entities, environment, originScene }) {
     return createMachine({
         id: "battle",
         initial: "inCombat",
         context: {
-            enemies,
+            entities,
             environment,
             originScene,
-            // dynamic injection
-            player: null,
             battleLog: [],
             rewards: null
         },
