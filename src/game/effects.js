@@ -31,20 +31,25 @@ const EffectDefinitions = {
     physical_damage: {
         applyCondition: (user, target) => target.isAlive(),
         onApply: (user, target, { baseDamage }) => {
-            const totalDamage = user.attack + baseDamage;
-            const damage = Math.max(totalDamage - target.defense, 1);
-            const health = target.health - damage;
+            const { attack } = user;
+            const totalDamage = attack + baseDamage;
+            const { defense } = target;
+            const damage = Math.max(totalDamage - defense, 1);
 
-            return { health };
+            return {
+                health: target.health - damage
+            };
         }
     },
 
     status: {
         // Not a good condition if you want to allow refreshing the status
-        applyCondition: (user, target, { statusEffect }) => !target.hasStatus(statusEffect.type),
-        onApply: (user, target, { statusEffect }) => {
+        applyCondition: (user, target, { statusType, duration }) => !target.hasStatus(statusType),
+        onApply: (user, target, { statusType, duration }) => {
+            const statusEffect = { statusType, duration };
+
             // Naive refresh, will require more elaboration later
-            const existing  = target.statusEffects.find(effect => effect.type === statusEffect.type);
+            const existing  = target.statusEffects.find(effect => effect.type === statusType);
 
             if (existing) {
                 return target.statusEffects.map((effect) => existing === effect ? statusEffect : effect);
@@ -73,7 +78,11 @@ const Effect = {
     },
 
     apply(user, target) {
-        return this.applyCondition(user, target) ? this.onApply(user, target, this.properties) : {};
+        if (this.applyCondition(user, target, this.properties)) {
+            return this.onApply(user, target, this.properties);
+        }
+
+        return {};
     }
 };
 

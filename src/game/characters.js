@@ -1,11 +1,11 @@
 const Character = {
-    init(id, name, team, health, attack, defense, magicPower, magicDefense) {
+    init({ id, name = 'Unnamed', team = 'Unaligned', health = 10, maxHealth = health, attack = 0, defense = 0, magicPower = 0, magicDefense = 0 }) {
         this.id = id;
         this.name = name;
         this.team = team;
 
         this.health = health;
-        this.maxHealth = health;
+        this.maxHealth = maxHealth;
 
         this.attack = attack;
         this.defense = defense;
@@ -28,9 +28,20 @@ const Character = {
 
 const Player = Object.create(Character);
 
-Player.init = function(id, name, health, attack, defense, magicPower, magicDefense) {
+Player.init = function({id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense}) {
     Character.init.call(
-        this, id, name, "player", health, attack, defense, magicPower, magicDefense
+        this,
+        {
+            id,
+            name,
+            team: "player",
+            health,
+            maxHealth,
+            attack,
+            defense,
+            magicPower,
+            magicDefense
+        }
     );
 
     this.inventory = [];
@@ -44,9 +55,20 @@ Player.addItem = function(item) { this.inventory.push(item); };
 
 const Ally = Object.create(Character);
 
-Ally.init = function(id, name, health, attack, defense, magicPower, magicDefense) {
+Player.init = function({id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense}) {
     Character.init.call(
-        this, id, name, "allies", health, attack, defense, magicPower, magicDefense
+        this,
+        {
+            id,
+            name,
+            team: "allies",
+            health,
+            maxHealth,
+            attack,
+            defense,
+            magicPower,
+            magicDefense
+        }
     );
 
     // TODO: Replace hardcoded default. Basic behaviors could be support, defense, aggressive
@@ -62,9 +84,20 @@ Ally.chooseAction = function() {
 
 const Enemy = Object.create(Character);
 
-Enemy.init = function(id, name, attack, defense, magicPower, magicDefense) {
+Player.init = function({id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense}) {
     Character.init.call(
-        this, id, name, "enemies", health, attack, defense, magicPower, magicDefense
+        this,
+        {
+            id,
+            name,
+            team: "enemies",
+            health,
+            maxHealth,
+            attack,
+            defense,
+            magicPower,
+            magicDefense
+        }
     );
 
     // TODO: Replace hardcoded default. Basic behaviors could be support, defense, aggressive
@@ -76,3 +109,5 @@ Enemy.init = function(id, name, attack, defense, magicPower, magicDefense) {
 Enemy.chooseAction = function() {
     return this.isAlive() ? "attack" : "none";
 };
+
+export { Character, Ally, Enemy}
