@@ -1,34 +1,37 @@
 import { describe, expect, test } from '@jest/globals';
-import { Skill } from '../skills';
-import { DamageEffect } from '../effects';
-import { TargetSelection, TargetType } from '../targeting';
+import { DamageTypes, StatusTypes } from '../constants';
 import { Character } from '../characters';
+import { Skill } from '../skills';
+import { DamageEffect, StatusEffect } from '../effects';
+import { TargetType } from '../targeting';
+
+const bindEntities = (entities) => (id) => entities.find(entity => entity.id === id);
 
 describe('Skill system', () => {
-    test('Skill.effect applies damage to multiple targets', () => {
-        const damageEffect = Object.create(DamageEffect).init({
+    test('Skill can apply to multiple targets', () => {
+        const damageEffect = DamageEffect.create({
             baseDamage: 15,
-            damageType: "physical"
+            damageType: DamageTypes.PHYSICAL
         });
-        const skill = Object.create(Skill).init(
-            "Slash",
-            "A powerful strike",
-            [ damageEffect ],
-            TargetType.ENEMY,
-            1,
-            TargetSelection.CHOICE
-        );
 
-        const user = Object.create(Character).init({
+        const skill = Skill.create({
+            name: "Slash",
+            description: "A powerful strike",
+            effects: [ damageEffect ],
+            targetType: TargetType.ENEMY,
+            targetCount: 1
+        });
+
+        const user = Character.create({
             id: "player1"
         });
 
         const targets = [
-            Object.create(Character).init({
+            Character.create({
                 id: "enemy1",
                 health: 50
             }),
-            Object.create(Character).init({
+            Character.create({
                 id: "enemy2",
                 health: 60
             })
@@ -38,9 +41,54 @@ describe('Skill system', () => {
         const updates = skill.effect(entities, user, targets);
 
         const { updatedEntities } = updates;
-        const getEntity = (id) => updatedEntities.find(entity => entity.id === id);
+        const getEntity = bindEntities(updatedEntities);
 
         expect(getEntity('enemy1').health).toBe(35);
         expect(getEntity('enemy2').health).toBe(45);
+    });
+
+    test('Skill can apply multiple effects', () => {
+        const damageEffect = DamageEffect.create({
+            baseDamage: 10,
+            damageType: DamageTypes.MAGICAL
+        });
+
+        const statusEffect = StatusEffect.create({
+            statusType: StatusTypes.BLEED,
+            duration: 5
+        });
+
+        const skill = Skill.create({
+            name: "Soul Stab",
+            description: "Rend an opponent's soul to inflict bleeding",
+            effects: [ damageEffect, statusEffect ],
+            targetType: TargetType.ENEMY,
+            targetCount: 1
+        });
+
+        const user = Character.create({
+            id: "player1",
+            magicPower: 1
+        });
+
+        const targets = [
+            Character.create({
+                id: "bleeder",
+                health: 50
+            })
+        ];
+
+        const entities = [ user, ...targets ];
+        const updates = skill.effect(entities, user, targets);
+
+        const { updatedEntities } = updates;
+        const getEntity = bindEntities(updatedEntities);
+
+        const bleeder = getEntity('bleeder');
+        expect(bleeder.health).toBe(39);
+        expect(bleeder.statusEffects).toContainEqual({
+            statusType: StatusTypes.BLEED,
+            duration: 5
+        });
     });
 });

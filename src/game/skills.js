@@ -1,7 +1,7 @@
 import { TargetSelection } from "./targeting";
 
 const Skill = {
-    init(name, description, effects, targetType, targetCount = 1, targetSelection = TargetSelection.CHOICE ) {
+    init({ name, description, effects, targetType, targetCount = 1, targetSelection = TargetSelection.CHOICE }) {
         this.name = name;
         this.description = description;
         this.effects = effects;
@@ -10,6 +10,10 @@ const Skill = {
         this.targetSelection = targetSelection;
 
         return this;
+    },
+
+    create(properties = {}) {
+        return Object.create(this).init(properties);
     },
 
     describe(user, targets) {

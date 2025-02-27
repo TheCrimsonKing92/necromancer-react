@@ -10,14 +10,12 @@ const HealingStatsByHealingType = {
 const getHealingStat = (healingType) => {
     const byType = HealingStatsByHealingType[healingType];
 
-    if (!byType) {
-        console.warn(`Unknown healing type ${healingType}, defaults to medicine`);
-        return "medicine";
+    if (byType) {
+        return byType;
     }
 
-    return byType;
-    
-
+    console.warn(`Unknown healing type ${healingType}, defaults to medicine`);
+    return "medicine";
 };
 
 export { getHealingStat };

@@ -17,13 +17,17 @@ const Character = {
         return this;
     },
 
+    create(properties = {}) {
+        return Object.create(this).init(properties);
+    },
+
     hasStatus(statusType) {
         return this.statusEffects.some(status => status.name === statusType);
     },
 
     isAlive() {
         return this.health > 0;
-    },
+    }
 };
 
 const Player = Object.create(Character);
@@ -48,6 +52,10 @@ Player.init = function({id, name, health, maxHealth = health, attack, defense, m
     this.skills = [];
 
     return this;
+};
+
+Player.create = function(properties = {}) {
+    return Object.create(this).init(properties);
 };
 
 Player.addSkill = function(skill) { this.skills.push(skill); };
@@ -84,7 +92,7 @@ Ally.chooseAction = function() {
 
 const Enemy = Object.create(Character);
 
-Player.init = function({id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense}) {
+Enemy.init = function({id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense}) {
     Character.init.call(
         this,
         {
@@ -104,6 +112,10 @@ Player.init = function({id, name, health, maxHealth = health, attack, defense, m
     this.behavior = "aggressive";
 
     return this;
+};
+
+Enemy.create = function(properties = {}) {
+    return Object.create(this).init(properties);
 };
 
 Enemy.chooseAction = function() {

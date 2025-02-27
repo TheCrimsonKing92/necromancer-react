@@ -17,7 +17,7 @@ const EffectDefinitions = {
         }
     },
 
-    magic_damage: {
+    magical_damage: {
         applyCondition: (user, target) => target.isAlive(),
         onApply: (user, target, { baseDamage }) => {
             const totalDamage = user.magicPower + baseDamage;
@@ -94,6 +94,9 @@ DamageEffect.init = function({ baseDamage, damageType = DamageTypes.PHYSICAL }) 
 
     return Effect.init.call(this, `${damageType}_damage`, { baseDamage });
 };
+DamageEffect.create = function(properties) {
+    return Object.create(this).init(properties);
+};
 
 const HealingEffect = Object.create(Effect);
 HealingEffect.init = function({ baseHealing, healingType = HealingTypes.PHYSICAL}) {
@@ -103,6 +106,9 @@ HealingEffect.init = function({ baseHealing, healingType = HealingTypes.PHYSICAL
 
     return Effect.init.call(this, "healing", { baseHealing, healingType })
 };
+HealingEffect.create = function(properties) {
+    return Object.create(this).init(properties);
+};
 
 const StatusEffect = Object.create(Effect);
 StatusEffect.init = function({ statusType, duration }) {
@@ -111,6 +117,9 @@ StatusEffect.init = function({ statusType, duration }) {
     }
 
     return Effect.init.call(this, "status", { statusType, duration });
+};
+StatusEffect.create = function(properties) {
+    return Object.create(this).init(properties);
 };
 
 export { Effect, DamageEffect, HealingEffect, StatusEffect };
