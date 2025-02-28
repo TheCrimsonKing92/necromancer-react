@@ -1,21 +1,35 @@
-import { HealingTypes } from "./constants";
+import { DamageTypes, HealingTypes } from "./constants";
 
-const HealingStats = [ "medicine", "magicPower" ];
+const DamageStatsByDamageType = {
+    [DamageTypes.PHYSICAL]: "attack",
+    [DamageTypes.MAGICAL]: "magicPower"
+};
+
+const DefenseStatsByDamageType = {
+    [DamageTypes.PHYSICAL]: "defense",
+    [DamageTypes.MAGICAL]: "magicDefense"
+};
 
 const HealingStatsByHealingType = {    
     [HealingTypes.MEDICINE]: "medicine",
     [HealingTypes.MAGIC]: "magicPower"
 };
 
-const getHealingStat = (healingType) => {
-    const byType = HealingStatsByHealingType[healingType];
+const bindStats = (statType, stats, defaultStat) => {
+    return (type) => {
+        const byType = stats[type];
 
-    if (byType) {
-        return byType;
-    }
+        if (byType) {
+            return byType;
+        }
 
-    console.warn(`Unknown healing type ${healingType}, defaults to medicine`);
-    return "medicine";
+        console.warn(`Unknown ${statType} type, defaults to ${defaultStat} stat`);
+        return defaultStat;
+    };
 };
 
-export { getHealingStat };
+const getDamageStat = bindStats('damage', DamageStatsByDamageType, 'attack');
+const getDefenseStat = bindStats('damage', DefenseStatsByDamageType, 'defense');
+const getHealingStat = bindStats('healing', HealingStatsByHealingType, 'medicine');
+
+export { getDamageStat, getDefenseStat, getHealingStat };

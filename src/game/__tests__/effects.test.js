@@ -4,7 +4,7 @@ import { Character } from '../characters';
 import { DamageTypes, HealingTypes, StatusTypes } from '../constants';
 
 describe('Effect system', () => {
-    test('Damage effect correctly reduces target health', () => {
+    test('Damage effect reduces target health', () => {
         const effect = DamageEffect.create({
             baseDamage: 10,
             damageType: DamageTypes.PHYSICAL
@@ -20,7 +20,7 @@ describe('Effect system', () => {
         expect(result.health).toBe(40);
     });
 
-    test('Physical damage effect correctly uses attack and defense', () => {
+    test('Physical damage effect uses attack and defense', () => {
         const effect = DamageEffect.create({
             baseDamage: 20,
             damageType: DamageTypes.PHYSICAL
@@ -39,7 +39,7 @@ describe('Effect system', () => {
         expect(result.health).toBe(75);
     });
 
-    test('Magical damage effect correctly uses magic power and magic defense', () => {
+    test('Magical damage effect uses magic power and magic defense', () => {
         const effect = DamageEffect.create({
             baseDamage: 10,
             damageType: DamageTypes.MAGICAL
@@ -58,15 +58,13 @@ describe('Effect system', () => {
         expect(result.health).toBe(79);
     });
 
-    test('Healing effect restores health without exceeding max health', () => {
+    test('Healing effect restores health', () => {
         const effect = HealingEffect.create({
             baseHealing: 20,
             healingType: HealingTypes.MAGIC
         });
 
-        const user = Character.create({
-            magicPower: 0
-        });
+        const user = Character.create();
         const target = Character.create({
             id: "ally1",
             health: 10,
@@ -77,7 +75,7 @@ describe('Effect system', () => {
         expect(result.health).toBe(30);
     });
 
-    test('Magic healing type enhances healing with magic power', () => {
+    test('Magic power stat enhances magic healing type', () => {
         const effect = HealingEffect.create({
             baseHealing: 20,
             healingType: HealingTypes.MAGIC
@@ -94,6 +92,44 @@ describe('Effect system', () => {
 
         const result = effect.apply(user, target);
         expect(result.health).toBe(40);
+    });
+
+    test('Medicine stat enhances medicine healing type', () => {
+        const effect = HealingEffect.create({
+            baseHealing: 10,
+            healingType: HealingTypes.MEDICINE
+        });
+
+        const user = Character.create({
+            medicine: 5
+        });
+        const target = Character.create({
+            id: "friendly",
+            health: 15,
+            maxHealth: 50
+        });
+
+        const result = effect.apply(user, target);
+        expect(result.health).toBe(30);
+    });
+
+    test('Healing effect does not exceed max health', () => {
+        const effect = HealingEffect.create({
+            baseHealing: 20,
+            healingType: HealingTypes.MAGIC
+        });
+
+        const user = Character.create({
+            magicPower: 9999
+        });
+        const target = Character.create({
+            id: "ally1",
+            health: 10,
+            maxHealth: 50
+        });
+
+        const result = effect.apply(user, target);
+        expect(result.health).toBe(50);
     });
 
     test('StatusEffect applies a status condition', () => {

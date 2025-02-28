@@ -7,6 +7,12 @@ const DamageTypes = {
     POISON: "poison"
 };
 
+const EffectTypes = {
+    DAMAGE: "damage",
+    HEALING: "healing",
+    STATUS: "status"
+};
+
 const HealingTypes = {
     MEDICINE: "medicine",
     MAGIC: "magic"
@@ -22,4 +28,4 @@ const StatusTypes = {
     STUN: "stun"
 };
 
-export { DamageTypes, HealingTypes, StatusTypes };
+export { DamageTypes, EffectTypes, HealingTypes, StatusTypes };

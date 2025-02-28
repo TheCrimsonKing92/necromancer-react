@@ -1,9 +1,22 @@
-import { DamageTypes } from "./constants";
-import { HealingTypes } from "./constants";
-import { StatusTypes } from "./constants";
-import { getHealingStat } from "./stats";
+import { DamageTypes,  EffectTypes, HealingTypes, StatusTypes } from "./constants";
+import { getDamageStat, getDefenseStat, getHealingStat } from "./stats";
 
 const EffectDefinitions = {
+    damage: {
+        applyCondition: (user, target) => target.isAlive(),
+        onApply: (user, target, { baseDamage, damageType }) => {
+            const damageStat = getDamageStat(damageType);
+            const defenseStat = getDefenseStat(damageType);
+            const userDamage = user[damageStat] || 0;
+            const targetDefense = target[defenseStat] || 0;
+            const totalDamage = (userDamage + baseDamage) - targetDefense;
+            const damage = Math.max(totalDamage, 1);
+            const health = target.health - damage;
+
+            return { health };
+        }
+    },
+
     healing: {
         applyCondition: (user, target) => target.isAlive() && target.health < target.maxHealth,
         onApply: (user, target, { baseHealing, healingType }) => {
@@ -14,31 +27,6 @@ const EffectDefinitions = {
             const health = target.health + healing;
 
             return { health };
-        }
-    },
-
-    magical_damage: {
-        applyCondition: (user, target) => target.isAlive(),
-        onApply: (user, target, { baseDamage }) => {
-            const totalDamage = user.magicPower + baseDamage;
-            const damage = Math.max(totalDamage - target.magicDefense, 1);
-            const health = target.health - damage;
-
-            return { health };
-        }
-    },
-
-    physical_damage: {
-        applyCondition: (user, target) => target.isAlive(),
-        onApply: (user, target, { baseDamage }) => {
-            const { attack } = user;
-            const totalDamage = attack + baseDamage;
-            const { defense } = target;
-            const damage = Math.max(totalDamage - defense, 1);
-
-            return {
-                health: target.health - damage
-            };
         }
     },
 
@@ -64,8 +52,12 @@ const EffectDefinitions = {
 
 const Effect = {
     init(type, properties = {}) {
-        if (!EffectDefinitions[type]) {
+        if (!Object.values(EffectTypes).includes(type)) {
             throw new Error(`Unknown effect type: ${type}`);
+        }
+
+        if (!EffectDefinitions[type]) {
+            throw new Error(`No effect definition entry for type; ${type}`);
         }
 
         this.type = type;
@@ -87,12 +79,12 @@ const Effect = {
 };
 
 const DamageEffect = Object.create(Effect);
-DamageEffect.init = function({ baseDamage, damageType = DamageTypes.PHYSICAL }) {
+DamageEffect.init = function({ baseDamage = 0, damageType = DamageTypes.PHYSICAL }) {
     if (!Object.values(DamageTypes).includes(damageType)) {
         throw new Error(`Invalid damage type: ${damageType}`);
     }
 
-    return Effect.init.call(this, `${damageType}_damage`, { baseDamage });
+    return Effect.init.call(this, EffectTypes.DAMAGE, { baseDamage, damageType });
 };
 DamageEffect.create = function(properties) {
     return Object.create(this).init(properties);
@@ -104,7 +96,7 @@ HealingEffect.init = function({ baseHealing, healingType = HealingTypes.PHYSICAL
         throw new Error(`Invalid healing type: ${healingType}`);
     }
 
-    return Effect.init.call(this, "healing", { baseHealing, healingType })
+    return Effect.init.call(this, EffectTypes.HEALING, { baseHealing, healingType })
 };
 HealingEffect.create = function(properties) {
     return Object.create(this).init(properties);
@@ -116,7 +108,7 @@ StatusEffect.init = function({ statusType, duration }) {
         throw new Error(`Invalid status type: ${statusType}`);
     }
 
-    return Effect.init.call(this, "status", { statusType, duration });
+    return Effect.init.call(this, EffectTypes.STATUS, { statusType, duration });
 };
 StatusEffect.create = function(properties) {
     return Object.create(this).init(properties);

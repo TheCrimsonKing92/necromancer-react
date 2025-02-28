@@ -1,5 +1,5 @@
 const Character = {
-    init({ id, name = 'Unnamed', team = 'Unaligned', health = 10, maxHealth = health, attack = 0, defense = 0, magicPower = 0, magicDefense = 0 }) {
+    init({ id, name = 'Unnamed', team = 'Unaligned', health = 10, maxHealth = health, attack = 0, defense = 0, magicPower = 0, magicDefense = 0, medicine = 0 }) {
         this.id = id;
         this.name = name;
         this.team = team;
@@ -11,6 +11,7 @@ const Character = {
         this.defense = defense;
         this.magicPower = magicPower;
         this.magicDefense = magicDefense;
+        this.medicine = medicine;
 
         this.statusEffects = [];
 
@@ -32,7 +33,7 @@ const Character = {
 
 const Player = Object.create(Character);
 
-Player.init = function({id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense}) {
+Player.init = function({ id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense, medicine }) {
     Character.init.call(
         this,
         {
@@ -44,7 +45,8 @@ Player.init = function({id, name, health, maxHealth = health, attack, defense, m
             attack,
             defense,
             magicPower,
-            magicDefense
+            magicDefense,
+            medicine
         }
     );
 
@@ -63,7 +65,7 @@ Player.addItem = function(item) { this.inventory.push(item); };
 
 const Ally = Object.create(Character);
 
-Player.init = function({id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense}) {
+Ally.init = function({ id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense, medicine }) {
     Character.init.call(
         this,
         {
@@ -75,7 +77,8 @@ Player.init = function({id, name, health, maxHealth = health, attack, defense, m
             attack,
             defense,
             magicPower,
-            magicDefense
+            magicDefense,
+            medicine
         }
     );
 
@@ -92,7 +95,7 @@ Ally.chooseAction = function() {
 
 const Enemy = Object.create(Character);
 
-Enemy.init = function({id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense}) {
+Enemy.init = function({ id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense, medicine }) {
     Character.init.call(
         this,
         {
@@ -104,7 +107,8 @@ Enemy.init = function({id, name, health, maxHealth = health, attack, defense, ma
             attack,
             defense,
             magicPower,
-            magicDefense
+            magicDefense,
+            medicine
         }
     );
 
