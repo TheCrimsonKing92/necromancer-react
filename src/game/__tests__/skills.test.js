@@ -1,9 +1,9 @@
 import { describe, expect, test } from '@jest/globals';
-import { DamageTypes } from '../constants';
 import { Character } from '../characters';
+import { DamageCalculationTypes, DamageTypes } from '../damage';
+import { DamageEffect, StatusEffect } from '../effects';
 import { Skill } from '../skills';
 import { StatusTypes } from '../statuses';
-import { DamageEffect, StatusEffect } from '../effects';
 import { TargetType } from '../targeting';
 
 const bindEntities = (entities) => (id) => entities.find(entity => entity.id === id);
@@ -12,7 +12,8 @@ describe('Skill system', () => {
     test('Skill can apply to multiple targets', () => {
         const damageEffect = DamageEffect.create({
             baseDamage: 15,
-            type: DamageTypes.PHYSICAL
+            type: DamageTypes.PHYSICAL,
+            calculationType: DamageCalculationTypes.FLAT
         });
 
         const skill = Skill.create({
@@ -20,7 +21,7 @@ describe('Skill system', () => {
             description: "A powerful strike",
             effects: [ damageEffect ],
             targetType: TargetType.ENEMY,
-            targetCount: 1
+            targetCount: 2
         });
 
         const user = Character.create({
@@ -51,7 +52,8 @@ describe('Skill system', () => {
     test('Skill can apply multiple effects', () => {
         const damageEffect = DamageEffect.create({
             baseDamage: 10,
-            type: DamageTypes.MAGICAL
+            type: DamageTypes.MAGICAL,
+            calculationType: DamageCalculationTypes.FLAT
         });
 
         const statusEffect = StatusEffect.create({

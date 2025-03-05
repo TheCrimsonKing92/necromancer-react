@@ -1,13 +1,22 @@
-import { DamageTypes, HealingTypes } from "./constants";
+import { HealingTypes } from "./constants";
+import { DamageTypes } from "./damage";
 
 const DamageStatsByDamageType = {
     [DamageTypes.PHYSICAL]: "attack",
-    [DamageTypes.MAGICAL]: "magicPower"
+    [DamageTypes.MAGICAL]: "magicPower",
+    [DamageTypes.FIRE]: "magicPower",
+    [DamageTypes.COLD]: "magicPower",
+    [DamageTypes.LIGHTNING]: "magicPower",
+    [DamageTypes.POISON]: "magicPower"
 };
 
 const DefenseStatsByDamageType = {
     [DamageTypes.PHYSICAL]: "defense",
-    [DamageTypes.MAGICAL]: "magicDefense"
+    [DamageTypes.MAGICAL]: "magicDefense",
+    [DamageTypes.FIRE]: "magicDefense",
+    [DamageTypes.COLD]: "magicDefense",
+    [DamageTypes.LIGHTNING]: "magicDefense",
+    [DamageTypes.POISON]: "magicDefense"
 };
 
 const HealingStatsByHealingType = {    

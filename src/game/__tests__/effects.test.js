@@ -1,14 +1,16 @@
 import { describe, test, expect } from '@jest/globals';
 import { DamageEffect, HealingEffect, StatusEffect } from "../effects";
 import { Character } from '../characters';
-import { DamageTypes, HealingTypes } from '../constants';
+import { HealingTypes } from '../constants';
+import { DamageCalculationTypes, DamageTypes } from '../damage';
 import { StatusTypes } from '../statuses';
 
 describe('Effect system', () => {
     test('Damage effect reduces target health', () => {
         const effect = DamageEffect.create({
             baseDamage: 10,
-            type: DamageTypes.PHYSICAL
+            type: DamageTypes.PHYSICAL,
+            calculationType: DamageCalculationTypes.FLAT
         });
         
         const target = Character.create({
@@ -23,7 +25,8 @@ describe('Effect system', () => {
     test('Physical damage effect uses attack and defense', () => {
         const effect = DamageEffect.create({
             baseDamage: 20,
-            type: DamageTypes.PHYSICAL
+            type: DamageTypes.PHYSICAL,
+            calculationType: DamageCalculationTypes.FLAT
         });
 
         const target = Character.create({
@@ -39,10 +42,72 @@ describe('Effect system', () => {
         expect(result.health).toBe(75);
     });
 
+    test("We can calculate damage based on the target's current health", () => {
+        const effect = DamageEffect.create({
+            baseDamage: 50,
+            type: DamageTypes.PHYSICAL,
+            calculationType: DamageCalculationTypes.TARGET_CURRENT_HP_PERCENT
+        });
+
+        const target = Character.create({
+            id: "enemy",
+            health: 100,
+            defense: 5
+        });
+
+        const result = effect.apply(
+            Character.create({ attack: 5 }),
+            target
+        );
+        expect(result.health).toBe(50);
+    });
+
+    test("We can calculate damage based on the target's max health", () => {
+        const effect = DamageEffect.create({
+            baseDamage: 10,
+            type: DamageTypes.PHYSICAL,
+            calculationType: DamageCalculationTypes.TARGET_MAX_HP_PERCENT
+        });
+
+        const target = Character.create({
+            id: "enemy",
+            health: 50,
+            maxHealth: 100,
+            defense: 5
+        });
+
+        const result = effect.apply(
+            Character.create({ attack: 1 }),
+            target
+        );
+        expect(result.health).toBe(44);
+    });
+
+    test("We can calculate damage based on the user's max health", () => {
+        const effect = DamageEffect.create({
+            baseDamage: 10,
+            type: DamageTypes.PHYSICAL,
+            calculationType: DamageCalculationTypes.USER_MAX_HP_PERCENT
+        });
+
+        const target = Character.create({
+            id: "enemy",
+            health: 100,
+            defense: 2
+        });
+
+        const result = effect.apply(
+            Character.create({ attack: 1, maxHealth: 1000 }),
+            target
+        );
+        expect(result.health).toBe(1);
+    });
+
     test('Magical damage effect uses magic power and magic defense', () => {
         const effect = DamageEffect.create({
             baseDamage: 10,
-            type: DamageTypes.MAGICAL
+            type: DamageTypes.MAGICAL,
+            calculationType: DamageCalculationTypes.FLAT
         });
         const target = Character.create({
             id: "enemy",

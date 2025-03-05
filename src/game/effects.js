@@ -1,19 +1,23 @@
 import {
     EffectTypes,
-    ValidDamageTypes, ValidEffectTypes, ValidHealingTypes
+    ValidEffectTypes, ValidHealingTypes
 } from "./constants";
+import { DamageCalculationTypes, DamageCalculators, ValidDamageTypes } from "./damage";
 import { StatusDefinitions, ValidStatusTypes } from "./statuses";
 import { getDamageStat, getDefenseStat, getHealingStat } from "./stats";
 
 const EffectDefinitions = {
     damage: {
         applyCondition: (user, target) => target.isAlive(),
-        onApply: (user, target, { type: damageType, baseDamage }) => {
+        onApply: (user, target, { type: damageType, baseDamage, calculationType }) => {
             const damageStat = getDamageStat(damageType);
             const defenseStat = getDefenseStat(damageType);
             const userDamage = user[damageStat] || 0;
             const targetDefense = target[defenseStat] || 0;
-            const totalDamage = (userDamage + baseDamage) - targetDefense;
+            
+            const calculation = DamageCalculators[calculationType] || DamageCalculators[DamageCalculationTypes.FLAT];
+
+            const totalDamage = calculation(user, target, baseDamage) + userDamage - targetDefense;
             const damage = Math.max(totalDamage, 1);
             const health = target.health - damage;
 
