@@ -1,7 +1,8 @@
 import { describe, expect, test } from '@jest/globals';
-import { DamageTypes, StatusTypes } from '../constants';
+import { DamageTypes } from '../constants';
 import { Character } from '../characters';
 import { Skill } from '../skills';
+import { StatusTypes } from '../statuses';
 import { DamageEffect, StatusEffect } from '../effects';
 import { TargetType } from '../targeting';
 
@@ -11,7 +12,7 @@ describe('Skill system', () => {
     test('Skill can apply to multiple targets', () => {
         const damageEffect = DamageEffect.create({
             baseDamage: 15,
-            damageType: DamageTypes.PHYSICAL
+            type: DamageTypes.PHYSICAL
         });
 
         const skill = Skill.create({
@@ -50,11 +51,11 @@ describe('Skill system', () => {
     test('Skill can apply multiple effects', () => {
         const damageEffect = DamageEffect.create({
             baseDamage: 10,
-            damageType: DamageTypes.MAGICAL
+            type: DamageTypes.MAGICAL
         });
 
         const statusEffect = StatusEffect.create({
-            statusType: StatusTypes.BLEED,
+            type: StatusTypes.BLEED,
             duration: 5
         });
 
@@ -87,7 +88,7 @@ describe('Skill system', () => {
         const bleeder = getEntity('bleeder');
         expect(bleeder.health).toBe(39);
         expect(bleeder.statusEffects).toContainEqual({
-            statusType: StatusTypes.BLEED,
+            type: StatusTypes.BLEED,
             duration: 5
         });
     });

@@ -18,14 +18,11 @@ const HealingTypes = {
     MAGIC: "magic"
 };
 
-const StatusTypes = {    
-    BUFF_ATTACK: "buff_attack",
-    BUFF_DEFENSE: "buff_defense",
-    BLEED: "bleed",
-    BURN: "burn",
-    FREEZE: "freeze",
-    POISON: "poison",
-    STUN: "stun"
-};
+const ValidDamageTypes = new Set(Object.values(DamageTypes));
+const ValidEffectTypes = new Set(Object.values(EffectTypes));
+const ValidHealingTypes = new Set(Object.values(HealingTypes));
 
-export { DamageTypes, EffectTypes, HealingTypes, StatusTypes };
+export {
+    DamageTypes, EffectTypes, HealingTypes,
+    ValidDamageTypes, ValidEffectTypes, ValidHealingTypes
+};
