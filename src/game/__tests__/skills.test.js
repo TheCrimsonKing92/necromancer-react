@@ -94,4 +94,48 @@ describe('Skill system', () => {
             duration: 5
         });
     });
+
+    test('Skill effects apply in order', () => {
+        // Base of 10, power of 1, defense of 3, total of 8
+        const flatDamage = DamageEffect.create({
+            baseDamage: 10,
+            type: DamageTypes.MAGICAL,
+            calculationType: DamageCalculationTypes.FLAT
+        });
+
+        // Floor of 42 * .1 = 4, power of 1, defense of 3, total of 2
+        const targetCurrentHealthPercentDamage = DamageEffect.create({
+            baseDamage: 10,
+            type: DamageTypes.MAGICAL,
+            calculationType: DamageCalculationTypes.TARGET_CURRENT_HP_PERCENT
+        });
+
+        const skill = Skill.create({
+            name: "Lingering Blast",
+            effects: [ flatDamage, targetCurrentHealthPercentDamage ],
+            targetType: TargetType.ENEMY,
+            targetCount: 1
+        });
+
+        const user = Character.create({
+            id: "doofus",
+            magicPower: 1
+        });
+
+        const targets = [
+            Character.create({
+                id: "unlucky",
+                health: 50,
+                magicDefense: 3
+            })
+        ];
+
+        const entities = [ user, ...targets ];
+        const updates = skill.effect(entities, user, targets);
+
+        const { updatedEntities } = updates;
+        const getEntity = bindEntities(updatedEntities);
+
+        expect(getEntity("unlucky").health).toBe(40);
+    });
 });

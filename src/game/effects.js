@@ -45,7 +45,7 @@ const EffectDefinitions = {
             const stackable = StatusDefinitions[type]?.stackable ?? false;
             const typeExists = target.statusEffects.find(effect => effect.type === type);
 
-            // Add if stackable or no instance
+            // Add if stackable or no existing instance
             if (stackable || !typeExists) {
                 return {
                     statusEffects: [
