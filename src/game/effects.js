@@ -1,8 +1,6 @@
-import {
-    EffectTypes,
-    ValidEffectTypes, ValidHealingTypes
-} from "./constants";
+import { EffectTypes, ValidEffectTypes } from "./constants";
 import { DamageCalculationTypes, DamageCalculators, ValidDamageTypes } from "./damage";
+import { ValidHealingTypes } from "./healing";
 import { StatusDefinitions, ValidStatusTypes } from "./statuses";
 import { getDamageStat, getDefenseStat, getHealingStat } from "./stats";
 

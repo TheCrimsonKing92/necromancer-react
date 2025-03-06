@@ -1,5 +1,5 @@
-import { HealingTypes } from "./constants";
 import { DamageTypes } from "./damage";
+import { HealingTypes } from "./healing";
 
 const DamageStatsByDamageType = {
     [DamageTypes.PHYSICAL]: "attack",

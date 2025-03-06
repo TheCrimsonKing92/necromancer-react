@@ -1,8 +1,8 @@
 import { describe, test, expect } from '@jest/globals';
 import { DamageEffect, HealingEffect, StatusEffect } from "../effects";
 import { Character } from '../characters';
-import { HealingTypes } from '../constants';
 import { DamageCalculationTypes, DamageTypes } from '../damage';
+import { HealingTypes } from '../healing';
 import { StatusTypes } from '../statuses';
 
 describe('Effect system', () => {
