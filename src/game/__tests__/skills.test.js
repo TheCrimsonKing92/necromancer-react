@@ -1,6 +1,6 @@
 import { describe, expect, test } from '@jest/globals';
 import { Character } from '../characters';
-import { DamageCalculationTypes, DamageTypes } from '../damage';
+import { DamageCalculationTypes, DamageSource, DamageTypes } from '../damage';
 import { DamageEffect, StatusEffect } from '../effects';
 import { Skill } from '../skills';
 import { StatusTypes } from '../statuses';
@@ -12,7 +12,8 @@ describe('Skill system', () => {
     test('Skill can apply to multiple targets', () => {
         const damageEffect = DamageEffect.create({
             baseDamage: 15,
-            type: DamageTypes.PHYSICAL,
+            type: DamageTypes.NORMAL,
+            damageSource: DamageSource.PHYSICAL,
             calculationType: DamageCalculationTypes.FLAT
         });
 
@@ -53,6 +54,7 @@ describe('Skill system', () => {
         const damageEffect = DamageEffect.create({
             baseDamage: 10,
             type: DamageTypes.MAGICAL,
+            damageSource: DamageSource.MAGICAL,
             calculationType: DamageCalculationTypes.FLAT
         });
 
@@ -100,6 +102,7 @@ describe('Skill system', () => {
         const flatDamage = DamageEffect.create({
             baseDamage: 10,
             type: DamageTypes.MAGICAL,
+            damageSource: DamageSource.MAGICAL,
             calculationType: DamageCalculationTypes.FLAT
         });
 
@@ -107,6 +110,7 @@ describe('Skill system', () => {
         const targetCurrentHealthPercentDamage = DamageEffect.create({
             baseDamage: 10,
             type: DamageTypes.MAGICAL,
+            damageSource: DamageSource.MAGICAL,
             calculationType: DamageCalculationTypes.TARGET_CURRENT_HP_PERCENT
         });
 

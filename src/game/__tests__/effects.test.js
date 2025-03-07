@@ -1,7 +1,7 @@
 import { describe, test, expect } from '@jest/globals';
 import { DamageEffect, HealingEffect, StatusEffect } from "../effects";
 import { Character } from '../characters';
-import { DamageCalculationTypes, DamageTypes } from '../damage';
+import { DamageCalculationTypes, DamageSource, DamageTypes } from '../damage';
 import { HealingTypes } from '../healing';
 import { StatusTypes } from '../statuses';
 
@@ -9,23 +9,26 @@ describe('Effect system', () => {
     test('Damage effect reduces target health', () => {
         const effect = DamageEffect.create({
             baseDamage: 10,
-            type: DamageTypes.PHYSICAL,
+            type: DamageTypes.NORMAL,
+            damageSource: DamageSource.PHYSICAL,
             calculationType: DamageCalculationTypes.FLAT
         });
         
         const target = Character.create({
             id: "enemy1",
-            health: 50
+            health: 50,
+            defense: 0
         });
 
-        const result = effect.apply(Character.create(), target);
+        const result = effect.apply(Character.create({ attack: 0 }), target);
         expect(result.health).toBe(40);
     });
 
     test('Physical damage effect uses attack and defense', () => {
         const effect = DamageEffect.create({
             baseDamage: 20,
-            type: DamageTypes.PHYSICAL,
+            type: DamageTypes.NORMAL,
+            damageSource: DamageSource.PHYSICAL,
             calculationType: DamageCalculationTypes.FLAT
         });
 
@@ -42,10 +45,33 @@ describe('Effect system', () => {
         expect(result.health).toBe(75);
     });
 
+    test("Damage is never reduced below 1 by high defense values", () => {
+        const effect = DamageEffect.create({
+            baseDamage: 20,
+            type: DamageTypes.NORMAL,
+            damageSource: DamageSource.PHYSICAL,
+            calculationType: DamageCalculationTypes.FLAT
+        });
+    
+        const target = Character.create({
+            id: "enemy",
+            health: 100,
+            defense: 9999
+        });
+    
+        const result = effect.apply(
+            Character.create({ attack: 10 }),
+            target
+        );
+    
+        expect(result.health).toBe(99);
+    });
+
     test("We can calculate damage based on the target's current health", () => {
         const effect = DamageEffect.create({
             baseDamage: 50,
-            type: DamageTypes.PHYSICAL,
+            type: DamageTypes.NORMAL,
+            damageSource: DamageSource.PHYSICAL,
             calculationType: DamageCalculationTypes.TARGET_CURRENT_HP_PERCENT
         });
 
@@ -62,10 +88,32 @@ describe('Effect system', () => {
         expect(result.health).toBe(50);
     });
 
+    test("Percentage-based damage always deals at least 1 damage", () => {
+        const effect = DamageEffect.create({
+            baseDamage: 1,
+            type: DamageTypes.NORMAL,
+            damageSource: DamageSource.PHYSICAL,
+            calculationType: DamageCalculationTypes.TARGET_CURRENT_HP_PERCENT
+        });
+    
+        const target = Character.create({
+            id: "enemy",
+            health: 5,
+            defense: 3
+        });
+    
+        const result = effect.apply(
+            Character.create({ attack: 1 }), 
+            target
+        );
+        expect(result.health).toBe(4);
+    });
+
     test("We can calculate damage based on the target's max health", () => {
         const effect = DamageEffect.create({
             baseDamage: 10,
-            type: DamageTypes.PHYSICAL,
+            type: DamageTypes.NORMAL,
+            damageSource: DamageSource.PHYSICAL,
             calculationType: DamageCalculationTypes.TARGET_MAX_HP_PERCENT
         });
 
@@ -83,10 +131,33 @@ describe('Effect system', () => {
         expect(result.health).toBe(44);
     });
 
+    test("Damage calculation remains precise for high max health values", () => {
+        const effect = DamageEffect.create({
+            baseDamage: 1,
+            type: DamageTypes.NORMAL,
+            damageSource: DamageSource.PHYSICAL,
+            calculationType: DamageCalculationTypes.TARGET_MAX_HP_PERCENT
+        });
+    
+        const target = Character.create({
+            id: "boss",
+            health: 1000000,
+            maxHealth: 1000000,
+            defense: 100
+        });
+    
+        const result = effect.apply(
+            Character.create({ attack: 50 }),
+            target
+        );
+        expect(result.health).toBe(990050);
+    });
+
     test("We can calculate damage based on the user's max health", () => {
         const effect = DamageEffect.create({
             baseDamage: 10,
-            type: DamageTypes.PHYSICAL,
+            type: DamageTypes.NORMAL,
+            damageSource: DamageSource.PHYSICAL,
             calculationType: DamageCalculationTypes.USER_MAX_HP_PERCENT
         });
 
@@ -107,6 +178,7 @@ describe('Effect system', () => {
         const effect = DamageEffect.create({
             baseDamage: 10,
             type: DamageTypes.MAGICAL,
+            damageSource: DamageSource.MAGICAL,
             calculationType: DamageCalculationTypes.FLAT
         });
         const target = Character.create({

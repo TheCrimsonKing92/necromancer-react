@@ -1,25 +1,21 @@
 import { EffectTypes, ValidEffectTypes } from "./constants";
-import { DamageCalculationTypes, DamageCalculators, ValidDamageTypes } from "./damage";
+import { calculateDamage, ValidDamageTypes } from "./damage";
 import { ValidHealingTypes } from "./healing";
 import { StatusDefinitions, ValidStatusTypes } from "./statuses";
-import { getDamageStat, getDefenseStat, getHealingStat } from "./stats";
+import { getHealingStat } from "./stats";
 
 const EffectDefinitions = {
     damage: {
         applyCondition: (user, target) => target.isAlive(),
-        onApply: (user, target, { type: damageType, baseDamage, calculationType }) => {
-            const damageStat = getDamageStat(damageType);
-            const defenseStat = getDefenseStat(damageType);
-            const userDamage = user[damageStat] || 0;
-            const targetDefense = target[defenseStat] || 0;
-            
-            const calculation = DamageCalculators[calculationType] || DamageCalculators[DamageCalculationTypes.FLAT];
+        onApply: (user, target, { type: damageType, baseDamage, damageSource, calculationType }) => {
+            if (!damageSource) {
+                throw new Error("Missing damageSource parameter in EffectDefinitions.damage.onApply");
+            }
 
-            const totalDamage = calculation(user, target, baseDamage) + userDamage - targetDefense;
-            const damage = Math.max(totalDamage, 1);
-            const health = target.health - damage;
-
-            return { health };
+            // (user, target, baseDamage, damageType, calculationType)
+            return {
+                health: target.health - calculateDamage(user, target, baseDamage, damageType, damageSource, calculationType)
+            }
         }
     },
 
