@@ -1,8 +1,23 @@
-import { EffectTypes, ValidEffectTypes } from "./constants";
+import { EffectCategories, ValidEffectCategories } from "./constants";
 import { calculateDamage, ValidDamageTypes } from "./damage";
 import { ValidHealingTypes } from "./healing";
 import { StatusDefinitions, ValidStatusTypes } from "./statuses";
 import { getHealingStat } from "./stats";
+
+const EffectTypes = {
+    STAT: "stat",
+    RESISTANCE: "resistance",
+    SKILL: "skill",
+    DAMAGE_MODIFIER: "damage_modifier",
+    DEFENSE_MODIFIER: "defense_modifier",
+    LIFESTEAL: "lifesteal",
+    ON_HIT: "on_hit"
+};
+
+const EffectScaling = {
+    NONE: (baseValue, effectLevel) => baseValue,
+    EFFECT_LEVEL: (baseValue, effectLevel) => baseValue * (1 + effectLevel * 0.2)
+};
 
 const EffectDefinitions = {
     damage: {
@@ -65,16 +80,16 @@ const EffectDefinitions = {
 
 const Effect = {
     create(properties) {
-        if (!this.EffectType || !this.ValidTypes) {
-            throw new Error('All Effect subtypes must define EffectType and ValidTypes');
+        if (!this.EffectCategory || !this.ValidTypes) {
+            throw new Error('All Effect subtypes must define EffectCategory and ValidTypes');
         }
 
-        if (!ValidEffectTypes.has(this.EffectType)) {
-            throw new Error(`Invalid EffectType: ${this.EffectType}`);
+        if (!ValidEffectCategories.has(this.EffectCategory)) {
+            throw new Error(`Invalid EffectCategory: ${this.EffectCategory}`);
         }
 
-        if (!EffectDefinitions[this.EffectType]) {
-            throw new Error(`No effect definition entry for type: ${this.EffectType}`);
+        if (!EffectDefinitions[this.EffectCategory]) {
+            throw new Error(`No effect definition entry for category: ${this.EffectCategory}`);
         }
 
         const { type } = properties;
@@ -89,8 +104,8 @@ const Effect = {
     init(properties = {}) {
         this.properties = properties;
         
-        this.applyCondition = EffectDefinitions[this.EffectType].applyCondition;
-        this.onApply = EffectDefinitions[this.EffectType].onApply;
+        this.applyCondition = EffectDefinitions[this.EffectCategory].applyCondition;
+        this.onApply = EffectDefinitions[this.EffectCategory].onApply;
 
         return this;
     },
@@ -105,15 +120,85 @@ const Effect = {
 };
 
 const DamageEffect = Object.create(Effect);
-DamageEffect.EffectType = EffectTypes.DAMAGE;
+DamageEffect.EffectCategory = EffectCategories.DAMAGE;
 DamageEffect.ValidTypes = ValidDamageTypes;
 
 const HealingEffect = Object.create(Effect);
-HealingEffect.EffectType = EffectTypes.HEALING;
+HealingEffect.EffectCategory = EffectCategories.HEALING;
 HealingEffect.ValidTypes = ValidHealingTypes;
 
 const StatusEffect = Object.create(Effect);
-StatusEffect.EffectType = EffectTypes.STATUS;
+StatusEffect.EffectCategory = EffectCategories.STATUS;
 StatusEffect.ValidTypes = ValidStatusTypes;
 
-export { Effect, DamageEffect, HealingEffect, StatusEffect };
+
+function generateStatEnhancement(effect, effectLevel) {
+    return {
+        type: effect.type,
+        stat: effect.stats[Math.floor(Math.random() * effect.stats.length)],
+        value: EffectScaling.EFFECT_LEVEL((effect.baseMin + effect.baseMax) / 2, effectLevel)
+    };
+}
+
+function generateStatusResistance(effect, effectLevel) {
+    return {
+        type: effect.type,
+        resistanceType: effect.resistances[Math.floor(Math.random() * effect.resistances.length)],
+        value: EffectScaling.EFFECT_LEVEL((effect.baseMin + effect.baseMax) / 2, effectLevel)
+    };
+}
+
+function generateSkillEnhancement(effect, effectLevel) {
+    return {
+        type: effect.type,
+        value: EffectScaling.EFFECT_LEVEL((effect.baseMin + effect.baseMax) / 2, effectLevel)
+    };
+}
+
+function generateEnhancedDamage(effect, effectLevel) {
+    return {
+        type: effect.type,
+        value: EffectScaling.EFFECT_LEVEL((effect.baseMin + effect.baseMax) / 2, effectLevel)
+    };
+}
+
+function generateLifeSteal(effect, effectLevel) {
+    return {
+        type: effect.type,
+        value: EffectScaling.EFFECT_LEVEL((effect.baseMin + effect.baseMax) / 2, effectLevel)
+    };
+}
+
+function generateOnHitEffect(effect, effectLevel) {
+    return {
+        type: effect.type,
+        statusEffect: effect.statusEffects[Math.floor(Math.random() * effect.statusEffects.length)],
+        chance: EffectScaling.EFFECT_LEVEL((effect.baseChance + effect.maxChance) / 2, effectLevel)
+    };
+}
+
+function generateEffect(effect, effectLevel) {
+    switch (effect.type) {
+        case EffectTypes.STAT:
+            return generateStatEnhancement(effect, effectLevel);
+        case EffectTypes.RESISTANCE:
+            return generateStatusResistance(effect, effectLevel);
+        case EffectTypes.SKILL:
+            return generateSkillEnhancement(effect, effectLevel);
+        case EffectTypes.DAMAGE_MODIFIER:
+            return generateEnhancedDamage(effect, effectLevel);
+        case EffectTypes.DEFENSE_MODIFIER:
+            return generateEnhancedDefense(effect, effectLevel);
+        case EffectTypes.LIFESTEAL:
+            return generateLifeSteal(effect, effectLevel);
+        case EffectTypes.ON_HIT:
+            return generateOnHitEffect(effect, effectLevel);
+        default:
+            return effect;
+    }
+}
+
+export {
+    Effect, DamageEffect, HealingEffect, StatusEffect,
+    generateEffect
+};

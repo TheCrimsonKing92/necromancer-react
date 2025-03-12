@@ -1,12 +1,12 @@
-const EffectTypes = {
+const EffectCategories = {
     DAMAGE: "damage",
     HEALING: "healing",
     STATUS: "status"
 };
 
-const ValidEffectTypes = new Set(Object.values(EffectTypes));
+const ValidEffectCategories = new Set(Object.values(EffectCategories));
 
 export {
-    EffectTypes,
-    ValidEffectTypes
+    EffectCategories,
+    ValidEffectCategories
 };
