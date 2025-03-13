@@ -20,6 +20,7 @@ const EffectTypes = {
     RESISTANCE: "resistance",
     SKILL: "skill",
     DAMAGE_MODIFIER: "damage_modifier",
+    ELEMENTAL_DAMAGE: "elemental_damage",
     DEFENSE_MODIFIER: "defense_modifier",
     LIFESTEAL: "lifesteal",
     ON_HIT: "on_hit"
@@ -180,6 +181,18 @@ function generateEnhancedDefense(effect, effectLevel) {
     };
 }
 
+function generateElementalDamage(effect, effectLevel) {
+    const minDamage = EffectScaling.EFFECT_LEVEL(effect.baseMin, effectLevel);
+    const maxDamage = EffectScaling.EFFECT_LEVEL(effect.baseMax, effectLevel);
+
+    return {
+        type: effect.type,
+        element: effect.elements[Math.floor(Math.random() * effect.elements.length)],
+        minDamage,
+        maxDamage
+    };
+}
+
 function generateLifeSteal(effect, effectLevel) {
     return {
         type: effect.type,
@@ -205,6 +218,8 @@ function generateEffect(effect, effectLevel) {
             return generateSkillEnhancement(effect, effectLevel);
         case EffectTypes.DAMAGE_MODIFIER:
             return generateEnhancedDamage(effect, effectLevel);
+        case EffectTypes.ELEMENTAL_DAMAGE:
+            return generateElementalDamage(effect, effectLevel);
         case EffectTypes.DEFENSE_MODIFIER:
             return generateEnhancedDefense(effect, effectLevel);
         case EffectTypes.LIFESTEAL:
