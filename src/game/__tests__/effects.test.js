@@ -1,9 +1,28 @@
-import { describe, test, expect } from '@jest/globals';
-import { DamageEffect, HealingEffect, StatusEffect } from "../effects";
+import { describe, test, expect, beforeAll } from '@jest/globals';
+import { expectHasNoProperties } from '../../utils/testUtils';
+import {
+    EffectScaling, EffectTypes,
+    DamageEffect, HealingEffect, StatusEffect,
+    generateEffect, getEffectPrototype, loadEffectsFromJSON
+} from "../effects";
 import { Character } from '../characters';
 import { DamageCalculationTypes, DamageSource, DamageTypes } from '../damage';
 import { HealingTypes } from '../healing';
 import { StatusTypes } from '../statuses';
+
+beforeAll(() => {
+    const mockEffectData = [
+        { type: "stat", stats: ["strength", "dexterity", "intelligence"], baseMin: 5, baseMax: 10 },
+        { type: "resistance", resistances: ["fire", "cold", "lightning", "poison"], baseMin: 3, baseMax: 7 },
+        { type: "skill", baseMin: 1, baseMax: 3 },
+        { type: "damage_modifier", baseMin: 10, baseMax: 20 },
+        { type: "defense_modifier", baseMin: 5, baseMax: 15 },
+        { type: "lifesteal", baseMin: 2, baseMax: 6 },
+        { type: "on_hit", statusEffects: ["burn", "freeze", "stun"], baseChance: 10, maxChance: 30 }
+    ];
+
+    loadEffectsFromJSON(mockEffectData);
+});
 
 describe('Effect system', () => {
     test('Damage effect reduces target health', () => {
@@ -329,4 +348,98 @@ describe('Effect system', () => {
         expect(result.statusEffects).toContainEqual(burnProps);
         expect(result.statusEffects).toContainEqual(bleedProps);
     });
+});
+
+describe('Effect generation', () => {
+    
+    test('Generated stat enhancement should have a single stat and value', () => {
+        const effectPrototype = getEffectPrototype(EffectTypes.STAT);
+        const effectLevel = 3;
+        const generated = generateEffect(effectPrototype, effectLevel);
+
+        expect(generated).toHaveProperty('type', EffectTypes.STAT);
+        expect(generated).toHaveProperty('stat');
+        expect(effectPrototype.stats).toContain(generated.stat);
+        expect(generated).toHaveProperty('value');
+        expect(generated.value).toBe(EffectScaling.EFFECT_LEVEL((effectPrototype.baseMin + effectPrototype.baseMax) / 2, effectLevel));
+
+        expectHasNoProperties(generated, [ 'stats', 'baseMin', 'baseMax' ]);
+    });
+
+    test('Generated status resistance should contain a single resistance type and value', () => {
+        const effectPrototype = getEffectPrototype(EffectTypes.RESISTANCE);
+        const effectLevel = 2;
+        const generated = generateEffect(effectPrototype, effectLevel);
+
+        expect(generated).toHaveProperty('type', EffectTypes.RESISTANCE);
+        expect(generated).toHaveProperty('resistanceType');
+        expect(effectPrototype.resistances).toContain(generated.resistanceType);
+        expect(generated).toHaveProperty('value');
+        expect(generated.value).toBe(EffectScaling.EFFECT_LEVEL((effectPrototype.baseMin + effectPrototype.baseMax) / 2, effectLevel));
+
+        expectHasNoProperties(generated, [ 'resistances', 'baseMin', 'baseMax' ]);
+    });
+
+    test('Generated skill enhancement should contain only value', () => {
+        const effectPrototype = getEffectPrototype(EffectTypes.SKILL);
+        const effectLevel = 5;
+        const generated = generateEffect(effectPrototype, effectLevel);
+
+        expect(generated).toHaveProperty('type', EffectTypes.SKILL);
+        expect(generated).toHaveProperty('value');
+        expect(generated.value).toBe(EffectScaling.EFFECT_LEVEL((effectPrototype.baseMin + effectPrototype.baseMax) / 2, effectLevel));
+
+        expectHasNoProperties(generated, [ 'baseMin', 'baseMax' ]);
+    });
+
+    test('Generated enhanced damage should contain only value', () => {
+        const effectPrototype = getEffectPrototype(EffectTypes.DAMAGE_MODIFIER);
+        const effectLevel = 4;
+        const generated = generateEffect(effectPrototype, effectLevel);
+
+        expect(generated).toHaveProperty('type', EffectTypes.DAMAGE_MODIFIER);
+        expect(generated).toHaveProperty('value');
+        expect(generated.value).toBe(EffectScaling.EFFECT_LEVEL((effectPrototype.baseMin + effectPrototype.baseMax) / 2, effectLevel));
+
+        expectHasNoProperties(generated, [ 'baseMin', 'baseMax' ]);
+    });
+
+    test('Generated enhanced defense should contain only value', () => {
+        const effectPrototype = getEffectPrototype(EffectTypes.DEFENSE_MODIFIER);
+        const effectLevel = 3;
+        const generated = generateEffect(effectPrototype, effectLevel);
+
+        expect(generated).toHaveProperty('type', EffectTypes.DEFENSE_MODIFIER);
+        expect(generated).toHaveProperty('value');
+        expect(generated.value).toBe(EffectScaling.EFFECT_LEVEL((effectPrototype.baseMin + effectPrototype.baseMax) / 2, effectLevel));
+
+        expectHasNoProperties(generated, [ 'baseMin', 'baseMax' ]);
+    });
+
+    test('Generated lifesteal should contain only value', () => {
+        const effectPrototype = getEffectPrototype(EffectTypes.LIFESTEAL);
+        const effectLevel = 2;
+        const generated = generateEffect(effectPrototype, effectLevel);
+
+        expect(generated).toHaveProperty('type', EffectTypes.LIFESTEAL);
+        expect(generated).toHaveProperty('value');
+        expect(generated.value).toBe(EffectScaling.EFFECT_LEVEL((effectPrototype.baseMin + effectPrototype.baseMax) / 2, effectLevel));
+
+        expectHasNoProperties(generated, [ 'baseMin', 'baseMax' ]);
+    });
+
+    test('Generated on-hit effect should contain only a status effect and chance', () => {
+        const effectPrototype = getEffectPrototype(EffectTypes.ON_HIT);
+        const effectLevel = 4;
+        const generated = generateEffect(effectPrototype, effectLevel);
+
+        expect(generated).toHaveProperty('type', EffectTypes.ON_HIT);
+        expect(generated).toHaveProperty('statusEffect');
+        expect(effectPrototype.statusEffects).toContain(generated.statusEffect);
+        expect(generated).toHaveProperty('chance');
+        expect(generated.chance).toBe(EffectScaling.EFFECT_LEVEL((effectPrototype.baseChance + effectPrototype.maxChance) / 2, effectLevel));
+
+        expectHasNoProperties(generated, [ 'statusEffects', 'baseChance', 'maxChance' ]);
+    });
+
 });

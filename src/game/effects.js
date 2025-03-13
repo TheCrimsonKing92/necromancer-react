@@ -4,6 +4,17 @@ import { ValidHealingTypes } from "./healing";
 import { StatusDefinitions, ValidStatusTypes } from "./statuses";
 import { getHealingStat } from "./stats";
 
+let effectData = null;
+
+const getEffectPrototype = (effectType) => {
+    if (!effectData) {
+        throw new Error("Effect data not loaded!");
+    }
+
+    return effectData.find(effect => effect.type === effectType);
+};
+const loadEffectsFromJSON = (jsonData) => effectData = jsonData;
+
 const EffectTypes = {
     STAT: "stat",
     RESISTANCE: "resistance",
@@ -162,6 +173,13 @@ function generateEnhancedDamage(effect, effectLevel) {
     };
 }
 
+function generateEnhancedDefense(effect, effectLevel) {
+    return {
+        type: effect.type,
+        value: EffectScaling.EFFECT_LEVEL((effect.baseMin + effect.baseMax) / 2, effectLevel)
+    };
+}
+
 function generateLifeSteal(effect, effectLevel) {
     return {
         type: effect.type,
@@ -199,6 +217,8 @@ function generateEffect(effect, effectLevel) {
 }
 
 export {
+    EffectScaling, EffectTypes,
     Effect, DamageEffect, HealingEffect, StatusEffect,
-    generateEffect
+    generateEffect,
+    getEffectPrototype, loadEffectsFromJSON
 };
