@@ -1,3 +1,6 @@
+import { deepCopy } from "../utils/copy";
+import { getRandomElement, getRandomIndex } from "../utils/random";
+
 const WeaponClasses = {
     SIMPLE_MELEE: "simple_melee",
     MARTIAL_MELEE: "martial_melee",
@@ -86,10 +89,10 @@ const generateMagicWeapon = (baseWeapon, rarity) => {
     if (!rarity.magicCount) return baseWeapon; // No magic if Common
 
     let magicEffects = [];
-    let possibleEffects = AllowedMagicEffects[baseWeapon.type] || [];
+    let possibleEffects = deepCopy(AllowedMagicEffects[baseWeapon.type] || []);
 
     while (magicEffects.length < rarity.magicCount && possibleEffects.length > 0) {
-        let effectIndex = Math.floor(Math.random() * possibleEffects.length);
+        const effectIndex = getRandomIndex(possibleEffects);
         magicEffects.push(possibleEffects.splice(effectIndex, 1)[0]); // Remove to prevent duplicates
     }
 

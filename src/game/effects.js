@@ -3,6 +3,7 @@ import { calculateDamage, ValidDamageTypes } from "./damage";
 import { ValidHealingTypes } from "./healing";
 import { StatusDefinitions, ValidStatusTypes } from "./statuses";
 import { getHealingStat } from "./stats";
+import { getRandomElement } from "../utils/random";
 
 let effectData = null;
 
@@ -147,7 +148,7 @@ StatusEffect.ValidTypes = ValidStatusTypes;
 function generateStatEnhancement(effect, effectLevel) {
     return {
         type: effect.type,
-        stat: effect.stats[Math.floor(Math.random() * effect.stats.length)],
+        stat: getRandomElement(effect.stats),
         value: EffectScaling.EFFECT_LEVEL((effect.baseMin + effect.baseMax) / 2, effectLevel)
     };
 }
@@ -155,7 +156,7 @@ function generateStatEnhancement(effect, effectLevel) {
 function generateStatusResistance(effect, effectLevel) {
     return {
         type: effect.type,
-        resistanceType: effect.resistances[Math.floor(Math.random() * effect.resistances.length)],
+        resistanceType: getRandomElement(effect.resistances),
         value: EffectScaling.EFFECT_LEVEL((effect.baseMin + effect.baseMax) / 2, effectLevel)
     };
 }
@@ -187,7 +188,7 @@ function generateElementalDamage(effect, effectLevel) {
 
     return {
         type: effect.type,
-        element: effect.elements[Math.floor(Math.random() * effect.elements.length)],
+        element: getRandomElement(effect.elements),
         minDamage,
         maxDamage
     };
@@ -203,7 +204,7 @@ function generateLifeSteal(effect, effectLevel) {
 function generateOnHitEffect(effect, effectLevel) {
     return {
         type: effect.type,
-        statusEffect: effect.statusEffects[Math.floor(Math.random() * effect.statusEffects.length)],
+        statusEffect: getRandomElement(effect.statusEffects),
         chance: EffectScaling.EFFECT_LEVEL((effect.baseChance + effect.maxChance) / 2, effectLevel)
     };
 }

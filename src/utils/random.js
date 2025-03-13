@@ -3,7 +3,11 @@ const getRandomElement = (array) => {
         throw new Error("getRandomElement called on an empty or non-array value");
     }
 
-    return array[Math.floor(Math.random() * array.length)];
+    return array[getRandomIndex(array)];
 };
 
-export { getRandomElement }
+const getRandomIndex = (array) => {
+    return Math.floor(Math.random() * array.length);
+};
+
+export { getRandomElement, getRandomIndex }

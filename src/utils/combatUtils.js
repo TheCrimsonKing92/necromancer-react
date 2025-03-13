@@ -1,4 +1,5 @@
 import { TargetType } from "../game/targeting";
+import { getRandomElement } from "./random";
 
 export const performAttack = (context, { weapon, attacker, targets }) => {
     const { battleLog, ...rest } = context;
@@ -64,10 +65,10 @@ export const getRandomTargets = (validTargets, targetCount) => {
     const selectedIndices = [];
 
     for (let selected = 0; selected < toSelect; selected++) {
-        let nextIndex = Math.floor(Math.random() * validTargets.length);
+        let nextIndex = getRandomElement(validTargets.length);
 
         while (selectedIndices.includes(nextIndex)) {
-            nextIndex = Math.floor(Math.random() * validTargets.length);
+            nextIndex = getRandomElement(validTargets.length);
         }
 
         selectedIndices.push(nextIndex);
