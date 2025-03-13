@@ -8,17 +8,18 @@ import {
 import { Character } from '../characters';
 import { DamageCalculationTypes, DamageSource, DamageTypes } from '../damage';
 import { HealingTypes } from '../healing';
+import { Stats } from '../stats';
 import { StatusTypes } from '../statuses';
 
 beforeAll(() => {
     const mockEffectData = [
-        { type: "stat", stats: ["strength", "dexterity", "intelligence"], baseMin: 5, baseMax: 10 },
-        { type: "resistance", resistances: ["fire", "cold", "lightning", "poison"], baseMin: 3, baseMax: 7 },
+        { type: "stat", stats: Object.values(Stats), baseMin: 5, baseMax: 10 },
+        { type: "resistance", resistances: [ "fire", "cold", "lightning", "poison", "magical" ], baseMin: 3, baseMax: 7 },
         { type: "skill", baseMin: 1, baseMax: 3 },
         { type: "damage_modifier", baseMin: 10, baseMax: 20 },
         { type: "defense_modifier", baseMin: 5, baseMax: 15 },
         { type: "lifesteal", baseMin: 2, baseMax: 6 },
-        { type: "on_hit", statusEffects: ["burn", "freeze", "stun"], baseChance: 10, maxChance: 30 }
+        { type: "on_hit", statusEffects: [ "burn", "freeze", "poison", "stun" ], baseChance: 10, maxChance: 30 }
     ];
 
     loadEffectsFromJSON(mockEffectData);

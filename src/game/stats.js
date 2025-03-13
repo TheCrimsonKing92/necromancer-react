@@ -1,5 +1,16 @@
 import { HealingTypes } from "./healing";
 
+const Stats = {
+    ATTACK: "attack",
+    DEFENSE: "defense",
+    MAGIC_DEFENSE: "magicDefense",
+    MAGIC_POWER: "magicPower",
+    MEDICINE: "medicine",
+    STRENGTH: "strength",
+    DEXTERITY: "dexterity",
+    INTELLIGENCE: "intelligence"
+};
+
 const HealingStatsByHealingType = {    
     [HealingTypes.MEDICINE]: "medicine",
     [HealingTypes.MAGIC]: "magicPower"
@@ -20,4 +31,7 @@ const bindStats = (statType, stats, defaultStat) => {
 
 const getHealingStat = bindStats('healing', HealingStatsByHealingType, 'medicine');
 
-export { getHealingStat };
+export {
+    Stats,
+    getHealingStat
+};
