@@ -26,6 +26,7 @@ describe("Equipment System", () => {
         const sword = { name: "Iron Sword", attack: 5 };
 
         character.equipItem(LoadoutSlots.MAIN_HAND, sword);
+        expect(character.loadout[LoadoutSlots.MAIN_HAND]).toEqual(sword);
         character.unequipItem(LoadoutSlots.MAIN_HAND);
         expect(character.loadout[LoadoutSlots.MAIN_HAND]).toBeNull();
     });
