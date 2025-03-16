@@ -41,7 +41,6 @@ const EffectDefinitions = {
                 throw new Error("Missing damageSource parameter in EffectDefinitions.damage.onApply");
             }
 
-            // (user, target, baseDamage, damageType, calculationType)
             return {
                 health: target.health - calculateDamage(user, target, baseDamage, damageType, damageSource, calculationType)
             }
@@ -52,9 +51,9 @@ const EffectDefinitions = {
         applyCondition: (user, target) => target.isAlive() && target.health < target.maxHealth,
         onApply: (user, target, { type: healingType, baseHealing }) => {
             const healingStat = getHealingStat(healingType);
-            const userHealing = user[healingStat] || 0;
+            const userHealing = user.getStat(healingStat) || 0;
             const totalHealing = userHealing + baseHealing;
-            const healing = Math.min(totalHealing, target.maxHealth - target.health);
+            const healing = Math.min(totalHealing, target.getStat('maxHealth') - target.health);
             const health = target.health + healing;
 
             return { health };
