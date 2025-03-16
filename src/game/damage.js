@@ -54,7 +54,8 @@ const ElementalResistanceModifiers = {
 };
 
 const applyResistance = (damage, target, damageType) => {
-    const baseResistance = target[ElementalResistanceModifiers[damageType]] || 0;
+    const resistanceStat = ElementalResistanceModifiers[damageType];
+    const baseResistance = target.getStat(resistanceStat) || 0;
     const SOFT_CAP = 50;
     const DECAY_START = 75;
     const HARD_CAP = 95;
@@ -79,33 +80,36 @@ const applyResistance = (damage, target, damageType) => {
 };
 
 const calculateElementalDamage = (user, target, baseDamage, damageType, damageSource, calculationType) => {
-    const scalingStat = DamageStatBySource[damageSource] || "attack";
-    const defenseStat = DefenseStatBySource[damageSource] || "defense";
-    const elementalPower = user[ElementalDamageModifiers[damageType]] || 0;
-
     if (!DamageCalculators[calculationType]) {
         throw new Error(`Unsupported damage calculation type: ${calculationType}`);
     }
 
+    const scalingStat = DamageStatBySource[damageSource] || "attack";
+    const defenseStat = DefenseStatBySource[damageSource] || "defense";
+    const powerStat = ElementalDamageModifiers[damageType];
+    const elementalPower = user.getStat(powerStat) || 0;
+
     const calculation = DamageCalculators[calculationType];
 
-    const initialDamage = calculation(user, target, baseDamage) + user[scalingStat];
+    const initialDamage = calculation(user, target, baseDamage) + user.getStat(scalingStat);
     const scaledDamage = initialDamage * (1 + (elementalPower / 100));
     const resisted = applyResistance(scaledDamage, target, damageType);
-    const reduced = Math.max(resisted - target[defenseStat], 1);
+    const reduced = Math.max(resisted - target.getStat(defenseStat), 1);
 
     return reduced;
 };
 
 const calculatePhysicalDamage = (user, target, baseDamage, damageType, calculationType) => {
-    const attackStat = user.attack;
-    const defenseStat = target.defense;
-
     if (!DamageCalculators[calculationType]) {
         throw new Error(`Unsupported damage calculation type: ${calculationType}`);
     }
 
-    const damage = DamageCalculators[calculationType](user, target, baseDamage) + attackStat - defenseStat;
+    const attackStat = user.getStat('attack');
+    const defenseStat = target.getStat('defense');
+
+    const calculation = DamageCalculators[calculationType];
+
+    const damage = calculation(user, target, baseDamage) + attackStat - defenseStat;
     return Math.max(damage, 1);
 };
 
