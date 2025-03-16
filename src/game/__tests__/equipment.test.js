@@ -70,7 +70,6 @@ describe("Equipment System", () => {
         const shield = { name: "Tower Shield", defense: 6 };
 
         character.equipItem(LoadoutSlots.MAIN_HAND, greatsword);
-        console.log('Loadout after equipping greatsword:', JSON.stringify(character.loadout));
         expect(() => character.equipItem(LoadoutSlots.OFF_HAND, shield)).toThrow(
             "Cannot equip an off-hand item while using a two-handed weapon."
         );
