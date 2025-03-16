@@ -1,6 +1,10 @@
 import { deepCopy } from "../utils/copy";
 import { getRandomElement, getRandomIndex } from "../utils/random";
 
+import { DamageTypes } from "./damage";
+import { EffectTypes } from "./effects";
+import { StatusTypes } from "./statuses";
+
 const WeaponClasses = {
     SIMPLE_MELEE: "simple_melee",
     MARTIAL_MELEE: "martial_melee",
@@ -103,3 +107,5 @@ const generateMagicWeapon = (baseWeapon, rarity) => {
         magicalEffects: magicEffects
     };
 };
+
+export { WeaponTypes };

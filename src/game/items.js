@@ -1,9 +1,13 @@
 const Item = {
-    init({ name, description, effect, targetType }) {
+    init({ name, description, effect, targetType, ...rest }) {
         this.name = name;
         this.description = description;
         this.effect = effect;
         this.targetType = targetType;
+
+        for (const prop in rest) {
+            this[prop] = rest[prop];
+        }
 
         return this;
     },

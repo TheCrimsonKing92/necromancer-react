@@ -1,4 +1,18 @@
 import { TargetSelection } from "./targeting";
+import { getRandomElement } from "../utils/random";
+
+let skillData = null;
+
+const getRandomSkillPrototype = () => getRandomElement(skillData);
+const getSkillPrototype = (skillName) => {
+    if (!skillData) {
+        throw new Error("Skill data not loaded!");
+    }
+
+    return skillData.find(skill => skill.name === skillName);
+};
+const getSkills = () => skillData;
+const loadSkillsFromJSON = (jsonData) => skillData = jsonData;
 
 const Skill = {
     init({ name = "Skill", description = "Description", effects, targetType, targetCount = 1, targetSelection = TargetSelection.CHOICE }) {
@@ -48,4 +62,10 @@ const Skill = {
     }
 };
 
-export { Skill };
+export {
+    Skill,
+    getRandomSkillPrototype,
+    getSkillPrototype,
+    getSkills,
+    loadSkillsFromJSON
+};

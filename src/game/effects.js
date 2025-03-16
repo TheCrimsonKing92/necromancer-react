@@ -4,6 +4,7 @@ import { ValidHealingTypes } from "./healing";
 import { StatusDefinitions, ValidStatusTypes } from "./statuses";
 import { getHealingStat } from "./stats";
 import { getRandomElement } from "../utils/random";
+import { getRandomSkillPrototype, getSkillPrototype, getSkills } from "./skills";
 
 let effectData = null;
 
@@ -162,8 +163,16 @@ function generateStatusResistance(effect, effectLevel) {
 }
 
 function generateSkillEnhancement(effect, effectLevel) {
+    const skillName = getRandomElement(effect.skills || getSkills()).name;
+    const skillPrototype = getSkillPrototype(skillName);
+
+    if (!skillPrototype) {
+        throw new Error(`Skill '${skillName}' not found in skill data.`);
+    }
+
     return {
         type: effect.type,
+        skill: skillName,
         value: EffectScaling.EFFECT_LEVEL((effect.baseMin + effect.baseMax) / 2, effectLevel)
     };
 }

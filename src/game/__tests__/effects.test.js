@@ -10,6 +10,9 @@ import { DamageCalculationTypes, DamageSource, DamageTypes } from '../damage';
 import { HealingTypes } from '../healing';
 import { Stats } from '../stats';
 import { StatusTypes } from '../statuses';
+import {
+    loadSkillsFromJSON
+} from '../skills';
 
 beforeAll(() => {
     const mockEffectData = [
@@ -24,6 +27,43 @@ beforeAll(() => {
     ];
 
     loadEffectsFromJSON(mockEffectData);
+
+    const mockSkillData = [
+        {
+            name: "Fireball",
+            description: "Launches a ball of fire at the enemy.",
+            effects: [{ type: "damage", damageType: "fire", baseDamage: 20 }],
+            targetType: "enemy",
+            targetCount: 1,
+            targetSelection: "choice"
+        },
+        {
+            name: "Ice Spear",
+            description: "Hurls an icy spear that pierces through enemies.",
+            effects: [{ type: "damage", damageType: "cold", baseDamage: 15 }],
+            targetType: "enemy",
+            targetCount: 1,
+            targetSelection: "choice"
+        },
+        {
+            name: "Healing Light",
+            description: "A warm light restores health to an ally.",
+            effects: [{ type: "healing", healingType: "magic", baseHealing: 25 }],
+            targetType: "ally",
+            targetCount: 1,
+            targetSelection: "choice"
+        },
+        {
+            name: "Power Strike",
+            description: "A powerful melee attack that stuns the enemy.",
+            effects: [{ type: "damage", damageType: "physical", baseDamage: 30 }, { type: "status", statusType: "stun", duration: 2 }],
+            targetType: "enemy",
+            targetCount: 1,
+            targetSelection: "choice"
+        }
+    ];
+
+    loadSkillsFromJSON(mockSkillData);
 });
 
 describe('Effect system', () => {
