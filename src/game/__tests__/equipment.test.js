@@ -10,8 +10,7 @@ describe("Equipment System", () => {
         character = Character.create({
             id: "player1",
             attack: 10,
-            defense: 5,
-            equipment: {}
+            defense: 5
         });
     });
 
@@ -19,16 +18,16 @@ describe("Equipment System", () => {
         const sword = { name: "Iron Sword", attack: 5 };
 
         character.equipItem(LoadoutSlots.MAIN_HAND, sword);
-        expect(character.loadout[LoadoutSlots.MAIN_HAND]).toEqual(sword);
+        expect(character.loadout.getSlot(LoadoutSlots.MAIN_HAND)).toEqual(sword);
     });
 
     test("Unequipping an item should remove it from the slot", () => {
         const sword = { name: "Iron Sword", attack: 5 };
 
         character.equipItem(LoadoutSlots.MAIN_HAND, sword);
-        expect(character.loadout[LoadoutSlots.MAIN_HAND]).toEqual(sword);
+        expect(character.loadout.getSlot(LoadoutSlots.MAIN_HAND)).toEqual(sword);
         character.unequipItem(LoadoutSlots.MAIN_HAND);
-        expect(character.loadout[LoadoutSlots.MAIN_HAND]).toBeNull();
+        expect(character.loadout.getSlot(LoadoutSlots.MAIN_HAND)).toBeNull();
     });
 
     test("Equipping armor should update defense stat", () => {
@@ -48,7 +47,7 @@ describe("Equipment System", () => {
     test("Equipping incompatible items should throw an error", () => {
         const helmet = { name: "Knight's Helm", defense: 5 };
 
-        expect(() => character.equipItem("INVALID_SLOT", helmet)).toThrow("Invalid equipment slot: INVALID_SLOT");
+        expect(() => character.equipItem("INVALID_SLOT", helmet)).toThrow("Invalid slot: INVALID_SLOT");
     });
 
     test("Swapping loadouts should retain equipment state", () => {
@@ -59,10 +58,10 @@ describe("Equipment System", () => {
         character.swapLoadout();
         character.equipItem(LoadoutSlots.MAIN_HAND, bow);
 
-        expect(character.loadout[LoadoutSlots.MAIN_HAND]).toEqual(bow);
+        expect(character.loadout.getSlot(LoadoutSlots.MAIN_HAND)).toEqual(bow);
 
         character.swapLoadout();
-        expect(character.loadout[LoadoutSlots.MAIN_HAND]).toEqual(sword);
+        expect(character.loadout.getSlot(LoadoutSlots.MAIN_HAND)).toEqual(sword);
     });
 
     test("Equipping two-handed weapons prevents an off-hand item", () => {
@@ -80,7 +79,7 @@ describe("Equipment System", () => {
 
         character.equipItem(EquipmentSlots.BODY, chestplate);
         character.swapLoadout();
-        expect(character.equipment[EquipmentSlots.BODY]).toEqual(chestplate);
+        expect(character.equipment.getSlot(EquipmentSlots.BODY)).toEqual(chestplate);
     });
 
     test("Ammo slot only allows compatible ammo", () => {
@@ -91,7 +90,7 @@ describe("Equipment System", () => {
 
         character.equipItem(LoadoutSlots.MAIN_HAND, bow);
         expect(() => character.equipItem(LoadoutSlots.AMMO, arrows)).not.toThrow(); // check no error
-        expect(character.loadout[LoadoutSlots.AMMO]).toEqual(arrows);
+        expect(character.loadout.getSlot(LoadoutSlots.AMMO)).toEqual(arrows);
 
         expect(() => character.equipItem(LoadoutSlots.AMMO, bolts)).toThrow("Incompatible ammo type for equipped weapon");
 
@@ -99,7 +98,7 @@ describe("Equipment System", () => {
 
         character.equipItem(LoadoutSlots.MAIN_HAND, crossbow);
         expect(() => character.equipItem(LoadoutSlots.AMMO, bolts)).not.toThrow();
-        expect(character.loadout[LoadoutSlots.AMMO]).toEqual(bolts);
+        expect(character.loadout.getSlot(LoadoutSlots.AMMO)).toEqual(bolts);
 
         expect(() => character.equipItem(LoadoutSlots.AMMO, arrows)).toThrow("Incompatible ammo type for equipped weapon");
     });
