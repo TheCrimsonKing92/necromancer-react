@@ -43,7 +43,7 @@ describe("Inventory System", () => {
     expect(character.inventory.findItems(it => it.name === "Healing Potion").length).toBe(0);
   });
 
-  test("Trying to remove an item not in inventory returns null (or throws)", () => {
+  test("Trying to remove an item not in inventory returns throws an error", () => {
     const ring = { name: "Ring of Luck", weight: 0.1 };
     expect(() => character.inventory.removeItem(ring)).toThrow("No such item in inventory");
   });
@@ -67,7 +67,7 @@ describe("Inventory System", () => {
     const smallItem = { name: "Dagger", weight: 35 };
     const bigItem   = { name: "Greatshield", weight: 36 };
 
-    character.inventory.addItem(smallItem); // total=3 => okay
+    character.inventory.addItem(smallItem);
     expect(() => character.inventory.addItem(bigItem)).toThrow("Not enough inventory capacity");
 
     character.strength = 20;
