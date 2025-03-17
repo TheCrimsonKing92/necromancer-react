@@ -26,7 +26,8 @@ describe("Equipment System", () => {
 
         character.equipItem(LoadoutSlots.MAIN_HAND, sword);
         expect(character.loadout.getSlot(LoadoutSlots.MAIN_HAND)).toEqual(sword);
-        character.unequipItem(LoadoutSlots.MAIN_HAND);
+        const removed = character.unequipItem(LoadoutSlots.MAIN_HAND);
+        expect(removed).toEqual(sword);
         expect(character.loadout.getSlot(LoadoutSlots.MAIN_HAND)).toBeNull();
     });
 
