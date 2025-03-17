@@ -55,7 +55,6 @@ describe("Inventory System", () => {
     character.inventory.addItem(bow);
     character.inventory.addItem(arrows);
 
-    // By name
     expect(character.inventory.findItems(it => [ bow.name, arrows.name ].includes(it.name)).length).toBe(2);
 
     const heavyItems = character.inventory.findItems(it => it.weight > 1);
