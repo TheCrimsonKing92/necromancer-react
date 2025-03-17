@@ -28,8 +28,7 @@ describe("Inventory System", () => {
   test("Cannot add item that exceeds capacity", () => {
     const heavyArmor = { name: "Heavy Armor", weight: 999 };
 
-    expect(() => character.inventory.addItem(heavyArmor))
-      .toThrow("Not enough inventory capacity to add item");
+    expect(() => character.inventory.addItem(heavyArmor)).toThrow("Not enough inventory capacity to add item");
   });
 
   test("Removing an item works correctly", () => {
@@ -63,14 +62,16 @@ describe("Inventory System", () => {
   });
 
   test("Capacity can increase if character's stats change", () => {
+    expect(character.inventory.getMaxCapacity()).toBe(70);
+
     const smallItem = { name: "Dagger", weight: 35 };
     const bigItem   = { name: "Greatshield", weight: 36 };
-
     character.inventory.addItem(smallItem);
     expect(() => character.inventory.addItem(bigItem)).toThrow("Not enough inventory capacity");
 
     character.strength = 20;
 
+    expect(character.inventory.getMaxCapacity()).toBe(90);
     expect(() => character.inventory.addItem(bigItem)).not.toThrow();
     expect(character.inventory.getCurrentWeight()).toBe(71);
   });
