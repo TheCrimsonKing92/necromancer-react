@@ -26,7 +26,6 @@ describe("Inventory System", () => {
   });
 
   test("Cannot add item that exceeds capacity", () => {
-    // Suppose capacity is 10 for a certain logic
     const heavyArmor = { name: "Heavy Armor", weight: 999 };
 
     expect(() => character.inventory.addItem(heavyArmor))
