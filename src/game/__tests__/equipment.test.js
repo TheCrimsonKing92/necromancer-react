@@ -1,6 +1,6 @@
 import { describe, test, expect, beforeEach } from '@jest/globals';
-import { EquipmentSlots, LoadoutSlots } from '../equipment';
 import { Character } from '../characters';
+import { EquipmentSlots, LoadoutSlots } from '../equipment';
 import { WeaponTypes } from '../weapons';
 
 describe("Equipment System", () => {
