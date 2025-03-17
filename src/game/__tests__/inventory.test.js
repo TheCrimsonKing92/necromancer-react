@@ -6,12 +6,9 @@ describe("Inventory System", () => {
   let character;
 
   beforeEach(() => {
-    // Hypothetical create call that references the character
-    // If your `Character` object sets up `inventory` internally, that’s fine too.
     character = Character.create({
       id: "test_character",
       name: "Test Character",
-      // Let's say this means base strength=10 => some capacity logic
       strength: 10  
     });
   });
