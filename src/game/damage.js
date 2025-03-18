@@ -8,8 +8,8 @@ const DamageCalculationTypes = {
 const DamageCalculators = {
     [DamageCalculationTypes.FLAT]: (user, target, baseDamage) => baseDamage,
     [DamageCalculationTypes.TARGET_CURRENT_HP_PERCENT]: (user, target, baseDamage) => Math.floor(target.health * (baseDamage / 100)),
-    [DamageCalculationTypes.TARGET_MAX_HP_PERCENT]: (user, target, baseDamage) => Math.floor(target.maxHealth * (baseDamage / 100)),
-    [DamageCalculationTypes.USER_MAX_HP_PERCENT]: (user, target, baseDamage) => Math.floor(user.maxHealth * (baseDamage / 100))
+    [DamageCalculationTypes.TARGET_MAX_HP_PERCENT]: (user, target, baseDamage) => Math.floor(target.getStat('maxHealth') * (baseDamage / 100)),
+    [DamageCalculationTypes.USER_MAX_HP_PERCENT]: (user, target, baseDamage) => Math.floor(user.getStat('maxHealth') * (baseDamage / 100))
 };
 
 const DamageSource = {

@@ -77,11 +77,10 @@ describe('Effect system', () => {
         
         const target = Character.create({
             id: "enemy1",
-            health: 50,
-            defense: 0
+            stats: { health: 50, defense: 0}
         });
 
-        const result = effect.apply(Character.create({ attack: 0 }), target);
+        const result = effect.apply(Character.create({}), target);
         expect(result.health).toBe(40);
     });
 
@@ -95,12 +94,11 @@ describe('Effect system', () => {
 
         const target = Character.create({
             id: "enemy1",
-            health: 100,
-            defense: 5
+            stats: { health: 100, defense: 5}
         });
 
         const result = effect.apply(
-            Character.create({ attack: 10 }),
+            Character.create({ stats: { attack: 10 } }),
             target
         );
         expect(result.health).toBe(75);
@@ -116,12 +114,11 @@ describe('Effect system', () => {
     
         const target = Character.create({
             id: "enemy",
-            health: 100,
-            defense: 9999
+            stats: { health: 100, defense: 9999 }
         });
     
         const result = effect.apply(
-            Character.create({ attack: 10 }),
+            Character.create({ stats: { attack: 10 } }),
             target
         );
     
@@ -138,12 +135,11 @@ describe('Effect system', () => {
 
         const target = Character.create({
             id: "enemy",
-            health: 100,
-            defense: 5
+            stats: { health: 100, defense: 5 }
         });
 
         const result = effect.apply(
-            Character.create({ attack: 5 }),
+            Character.create({ stats: { attack: 5 } }),
             target
         );
         expect(result.health).toBe(50);
@@ -159,12 +155,11 @@ describe('Effect system', () => {
     
         const target = Character.create({
             id: "enemy",
-            health: 5,
-            defense: 3
+            stats: { health: 5, defense: 3 }
         });
     
         const result = effect.apply(
-            Character.create({ attack: 1 }), 
+            Character.create({ stats: { attack: 1 } }), 
             target
         );
         expect(result.health).toBe(4);
@@ -180,13 +175,15 @@ describe('Effect system', () => {
 
         const target = Character.create({
             id: "enemy",
-            health: 50,
-            maxHealth: 100,
-            defense: 5
+            stats: {
+                health: 50,
+                maxHealth: 100,
+                defense: 5
+            }
         });
 
         const result = effect.apply(
-            Character.create({ attack: 1 }),
+            Character.create({ stats: { attack: 1 } }),
             target
         );
         expect(result.health).toBe(44);
@@ -202,13 +199,15 @@ describe('Effect system', () => {
     
         const target = Character.create({
             id: "boss",
-            health: 1000000,
-            maxHealth: 1000000,
-            defense: 100
+            stats: {
+                health: 1000000,
+                maxHealth: 1000000,
+                defense: 100
+            }
         });
     
         const result = effect.apply(
-            Character.create({ attack: 50 }),
+            Character.create({ stats: { attack: 50 } }),
             target
         );
         expect(result.health).toBe(990050);
@@ -224,12 +223,14 @@ describe('Effect system', () => {
 
         const target = Character.create({
             id: "enemy",
-            health: 100,
-            defense: 2
+            stats: {
+                health: 100,
+                defense: 2
+            }
         });
 
         const result = effect.apply(
-            Character.create({ attack: 1, maxHealth: 1000 }),
+            Character.create({ stats: { attack: 1, maxHealth: 1000 } }),
             target
         );
         expect(result.health).toBe(1);
@@ -244,14 +245,14 @@ describe('Effect system', () => {
         });
         const target = Character.create({
             id: "enemy",
-            health: 90,
-            magicDefense: 1
+            stats: {
+                health: 90,
+                magicDefense: 1
+            }
         });
 
         const result = effect.apply(
-            Character.create({
-                magicPower: 2
-            }),
+            Character.create({ stats: { magicPower: 2 } }),
             target
         );
         expect(result.health).toBe(79);
@@ -265,11 +266,13 @@ describe('Effect system', () => {
 
         const target = Character.create({
             id: "ally1",
-            health: 10,
-            maxHealth: 50
+            stats: {
+                health: 10,
+                maxHealth: 50
+            }
         });
 
-        const result = effect.apply(Character.create(), target);
+        const result = effect.apply(Character.create({}), target);
         expect(result.health).toBe(30);
     });
 
@@ -281,14 +284,14 @@ describe('Effect system', () => {
 
         const target = Character.create({
             id: "ally1",
-            health: 10,
-            maxHealth: 50
+            stats: {
+                health: 10,
+                maxHealth: 50
+            }
         });
 
         const result = effect.apply(
-            Character.create({
-                magicPower: 10
-            }),
+            Character.create({ stats: { magicPower: 10 } }),
             target
         );
         expect(result.health).toBe(40);
@@ -300,13 +303,13 @@ describe('Effect system', () => {
             type: HealingTypes.MEDICINE
         });
 
-        const user = Character.create({
-            medicine: 5
-        });
+        const user = Character.create({ stats: { medicine: 5 } });
         const target = Character.create({
             id: "friendly",
-            health: 15,
-            maxHealth: 50
+            stats: {
+                health: 15,
+                maxHealth: 50
+            }
         });
 
         const result = effect.apply(user, target);
@@ -319,13 +322,13 @@ describe('Effect system', () => {
             type: HealingTypes.MAGIC
         });
 
-        const user = Character.create({
-            magicPower: 9999
-        });
+        const user = Character.create({ stats: { magicPower: 9999 } });
         const target = Character.create({
             id: "ally1",
-            health: 10,
-            maxHealth: 50
+            stats: {
+                health: 10,
+                maxHealth: 50
+            }
         });
 
         const result = effect.apply(user, target);

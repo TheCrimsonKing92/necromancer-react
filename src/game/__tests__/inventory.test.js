@@ -1,6 +1,7 @@
 import { describe, test, expect, beforeEach } from "@jest/globals";
 import { Character } from "../characters";
 import { Inventory } from "../inventory";
+import { EquipmentSlots } from "../equipment";
 
 describe("Inventory System", () => {
   let character;
@@ -9,7 +10,7 @@ describe("Inventory System", () => {
     character = Character.create({
       id: "test_character",
       name: "Test Character",
-      strength: 10  
+      stats: { strength: 10}
     });
   });
 
@@ -69,7 +70,7 @@ describe("Inventory System", () => {
     character.inventory.addItem(smallItem);
     expect(() => character.inventory.addItem(bigItem)).toThrow("Not enough inventory capacity");
 
-    character.strength = 20;
+    character.setStat('strength', 20);
 
     expect(character.inventory.getMaxCapacity()).toBe(90);
     expect(() => character.inventory.addItem(bigItem)).not.toThrow();

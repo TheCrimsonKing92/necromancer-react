@@ -9,8 +9,7 @@ describe("Equipment System", () => {
     beforeEach(() => {
         character = Character.create({
             id: "player1",
-            attack: 10,
-            defense: 5
+            stats: { attack: 10, defense: 5 }
         });
     });
 

@@ -48,7 +48,7 @@ const EffectDefinitions = {
     },
 
     healing: {
-        applyCondition: (user, target) => target.isAlive() && target.health < target.maxHealth,
+        applyCondition: (user, target) => target.isAlive() && target.health < target.getStat('maxHealth'),
         onApply: (user, target, { type: healingType, baseHealing }) => {
             const healingStat = getHealingStat(healingType);
             const userHealing = user.getStat(healingStat) || 0;

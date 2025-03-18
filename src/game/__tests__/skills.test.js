@@ -32,11 +32,11 @@ describe('Skill system', () => {
         const targets = [
             Character.create({
                 id: "enemy1",
-                health: 50
+                stats: { health: 50 }
             }),
             Character.create({
                 id: "enemy2",
-                health: 60
+                stats: { health: 60 }
             })
         ];
 
@@ -73,13 +73,13 @@ describe('Skill system', () => {
 
         const user = Character.create({
             id: "player1",
-            magicPower: 1
+            stats: { magicPower: 1}
         });
 
         const targets = [
             Character.create({
                 id: "bleeder",
-                health: 50
+                stats: { health: 50 }
             })
         ];
 
@@ -123,14 +123,13 @@ describe('Skill system', () => {
 
         const user = Character.create({
             id: "doofus",
-            magicPower: 1
+            stats: { magicPower: 1 }
         });
 
         const targets = [
             Character.create({
                 id: "unlucky",
-                health: 50,
-                magicDefense: 3
+                stats: { health: 50, magicDefense: 3 }
             })
         ];
 

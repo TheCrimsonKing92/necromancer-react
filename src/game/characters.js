@@ -3,26 +3,22 @@ import {
     Equipment, LoadoutEquipment
 } from './equipment';
 import { Inventory } from './inventory';
+import { DEFAULT_STATS } from './stats';
 
 const Character = {    
     // #region Object Creation
     create(properties = {}) {
         return Object.create(this).init(properties);
     },
-    init({ id, name = 'Unnamed', team = 'Unaligned', health = 10, maxHealth = health, attack = 0, defense = 0, magicPower = 0, magicDefense = 0, medicine = 0, strength = 0, statusEffects = [], inventory }) {
+    init({ id, name = 'Unnamed', team = 'Unaligned', stats = {}, statusEffects = [], inventory }) {
         this.id = id;
         this.name = name;
         this.team = team;
 
-        this.health = health;
-        this.maxHealth = maxHealth;
-
-        this.attack = attack;
-        this.defense = defense;
-        this.magicPower = magicPower;
-        this.magicDefense = magicDefense;
-        this.medicine = medicine;
-        this.strength = strength;
+        this.stats = {
+            ...DEFAULT_STATS,
+            ...stats
+        };
 
         this.statusEffects = statusEffects;
 
@@ -120,9 +116,25 @@ const Character = {
     getStat(statName) {
         return this.equippedItems.reduce(
             (total, item) => total + (item?.[statName] || 0),
-            this[statName] || 0
+            this.stats[statName] || 0
         );
-    },  
+    },
+    
+    setStat(statName, value) {
+        if (!this.stats.hasOwnProperty(statName)) {
+            throw new Error(`Attempted to set non-existent stat: ${statName} to value ${value}`);
+        }
+
+        this.stats[statName] = value;
+    },
+
+    get health() {
+        return this.getStat('health');
+    },
+
+    set health(value) {
+        this.setStat('health', value);
+    },
 
     hasStatus(statusType) {
         return this.statusEffects.some(status => status.name === statusType);
@@ -136,25 +148,18 @@ const Character = {
 
 const Player = Object.create(Character);
 
-Player.init = function({ id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense, medicine, statusEffects }) {
+Player.init = function({ id, name, stats, statusEffects, inventory }) {
     Character.init.call(
         this,
         {
             id,
             name,
             team: "player",
-            health,
-            maxHealth,
-            attack,
-            defense,
-            magicPower,
-            magicDefense,
-            medicine,
-            statusEffects
+            stats,
+            statusEffects,
+            inventory
         }
     );
-
-    this.skills = [];
 
     return this;
 };
@@ -163,26 +168,18 @@ Player.create = function(properties = {}) {
     return Object.create(this).init(properties);
 };
 
-Player.addSkill = function(skill) { this.skills.push(skill); };
-Player.addItem = function(item) { this.inventory.push(item); };
-
 const Ally = Object.create(Character);
 
-Ally.init = function({ id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense, medicine, statusEffects }) {
+Ally.init = function({ id, name, stats, statusEffects, inventory }) {
     Character.init.call(
         this,
         {
             id,
             name,
             team: "allies",
-            health,
-            maxHealth,
-            attack,
-            defense,
-            magicPower,
-            magicDefense,
-            medicine,
-            statusEffects
+            stats,
+            statusEffects,
+            inventory
         }
     );
 
