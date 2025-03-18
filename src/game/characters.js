@@ -4,7 +4,11 @@ import {
 } from './equipment';
 import { Inventory } from './inventory';
 
-const Character = {
+const Character = {    
+    // #region Object Creation
+    create(properties = {}) {
+        return Object.create(this).init(properties);
+    },
     init({ id, name = 'Unnamed', team = 'Unaligned', health = 10, maxHealth = health, attack = 0, defense = 0, magicPower = 0, magicDefense = 0, medicine = 0, strength = 0, statusEffects = [], inventory }) {
         this.id = id;
         this.name = name;
@@ -40,15 +44,21 @@ const Character = {
 
         return this;
     },
+    // #endregion
+
+    // #region Inventory Management
     
-    addSkill(skill) {
-        this.baseSkills.push(skill);
+    addItemToInventory(item) {
+        this.inventory.addItem(item);
     },
 
-    create(properties = {}) {
-        return Object.create(this).init(properties);
+    removeItemFromInventory(item) {
+        this.inventory.removeItem(item);
     },
 
+    // #endregion
+
+    // #region Equipment and Loadouts
     equipItem(slot, item) {
         const isEquipmentSlot = this.equipment.hasSlot(slot);
         const isLoadoutSlot = this.loadout.hasSlot(slot);
@@ -62,6 +72,10 @@ const Character = {
         } else {
             this.equipment.equipItem(slot, item);
         }
+    },
+
+    swapLoadout() {
+        this.activeLoadout = this.activeLoadout === 0 ? 1 : 0;
     },
 
     unequipItem(slot) {
@@ -87,13 +101,22 @@ const Character = {
         return this.loadouts[this.activeLoadout];
     },
 
+    // #endregion
+    
+    // #region Skills
+    addSkill(skill) {
+        this.baseSkills.push(skill);
+    },
+
     getSkillLevel(skillName) {
         const baseLevel = this.baseSkills[skillName] || 0;
         const bonus = this.skillEnhancements[skillName] || 0;
 
         return baseLevel + bonus;
     },
+    // #endregion
 
+    // #region Stats and Status(es)
     getStat(statName) {
         return this.equippedItems.reduce(
             (total, item) => total + (item?.[statName] || 0),
@@ -107,11 +130,8 @@ const Character = {
 
     isAlive() {
         return this.health > 0;
-    },
-
-    swapLoadout() {
-        this.activeLoadout = this.activeLoadout === 0 ? 1 : 0;
-    } 
+    }
+    // #endregion
 };
 
 const Player = Object.create(Character);
