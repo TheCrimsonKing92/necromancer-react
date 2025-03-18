@@ -196,21 +196,16 @@ Ally.chooseAction = function() {
 
 const Enemy = Object.create(Character);
 
-Enemy.init = function({ id, name, health, maxHealth = health, attack, defense, magicPower, magicDefense, medicine, statusEffects }) {
+Enemy.init = function({ id, name, stats, statusEffects, inventory }) {
     Character.init.call(
         this,
         {
             id,
             name,
             team: "enemies",
-            health,
-            maxHealth,
-            attack,
-            defense,
-            magicPower,
-            magicDefense,
-            medicine,
-            statusEffects
+            stats,
+            statusEffects,
+            inventory
         }
     );
 
