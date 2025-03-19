@@ -31,28 +31,26 @@ describe("Equipment System", () => {
     });
 
     test("Equipping armor should update defense stat", () => {
-        const armor = { name: "Steel Chestplate", defense: 10 };
+        const armor = { name: "Steel Chestplate", statBonuses: { defense: 10 } };
 
         character.equipItem(EquipmentSlots.BODY, armor);
         expect(character.getStat('defense')).toBe(15);
     });
 
     test("Equipping an accessory should apply its bonus", () => {
-        const ring = { name: "Ring of Strength", strength: 3 };
+        const ring = { name: "Ring of Strength", statBonuses: { strength: 3 } };
 
         character.equipItem(EquipmentSlots.LEFT_RING, ring);
         expect(character.getStat('strength')).toBe(3);
     });
 
     test("Equipping incompatible items should throw an error", () => {
-        const helmet = { name: "Knight's Helm", defense: 5 };
-
-        expect(() => character.equipItem("INVALID_SLOT", helmet)).toThrow("Invalid slot: INVALID_SLOT");
+        expect(() => character.equipItem("INVALID_SLOT", {})).toThrow("Invalid slot: INVALID_SLOT");
     });
 
     test("Swapping loadouts should retain equipment state", () => {
         const sword = { name: "Iron Sword", attack: 5 };
-        const bow = { name: "Longbow", attack: 4, requiresAmmo: true };
+        const bow = { name: "Longbow", attack: 4, ammo: "arrow" };
 
         character.equipItem(LoadoutSlots.MAIN_HAND, sword);
         character.swapLoadout();

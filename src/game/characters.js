@@ -22,8 +22,7 @@ const Character = {
 
         this.statusEffects = statusEffects;
 
-        this.baseSkills = {};
-        this.skillEnhancements = {};
+        this.skills = {};
 
         this.inventory = inventory || Inventory.create(this);
 
@@ -101,21 +100,21 @@ const Character = {
     
     // #region Skills
     addSkill(skill) {
-        this.baseSkills.push(skill);
+        this.skills.push(skill);
     },
 
     getSkillLevel(skillName) {
-        const baseLevel = this.baseSkills[skillName] || 0;
-        const bonus = this.skillEnhancements[skillName] || 0;
-
-        return baseLevel + bonus;
+        return this.equippedItems.reduce(
+          (total, item) => total + (item?.skillBonuses?.[skillName] || 0),
+          this.baseSkills[skillName] || 0
+        );
     },
     // #endregion
 
     // #region Stats and Status(es)
     getStat(statName) {
         return this.equippedItems.reduce(
-            (total, item) => total + (item?.[statName] || 0),
+            (total, item) => total + (item?.statBonuses?.[statName] || 0),
             this.stats[statName] || 0
         );
     },
