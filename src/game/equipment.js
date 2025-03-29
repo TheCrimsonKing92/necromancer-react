@@ -1,10 +1,10 @@
 import { WeaponTypes } from "./weapons";
 
 const EquipmentSlots = {
-    AMMO: "ammo",
     HEAD: "head",
     BODY: "body",
     HANDS: "hands",
+    WAIST: "waist",
     LEGS: "legs",
     FEET: "feet",
     LEFT_RING: "leftRing",
@@ -12,18 +12,22 @@ const EquipmentSlots = {
     NECK: "neck"
 };
 
+const ValidEquipmentSlots = new Set(Object.values(EquipmentSlots));
+
 const LoadoutSlots = {
     MAIN_HAND: "mainHand",
     OFF_HAND: "offHand",
     AMMO: "ammo"
 };
 
+const ValidLoadoutSlots = new Set(Object.values(LoadoutSlots));
+
 const Equipment = {
     formatInvalidSlots: (errorSlots) => `Invalid slots requested for equipment: ${errorSlots.join(", ")}`,
     formatInvalidEquip: (slot) => `Attempted to equip item in invalid equipment slot: ${slot}`,
     formatInvalidUnequip: (slot) => `Attempt to unequip item from invalid equipment slot: ${slot}`,
 
-    validSlots: new Set(Object.values(EquipmentSlots)),
+    validSlots: ValidEquipmentSlots,
 
     create() {
         return Object.create(this)
@@ -80,7 +84,7 @@ const isAmmoCompatible = (weapon, ammo) => {
 };
 
 const LoadoutEquipment = Object.create(Equipment);
-LoadoutEquipment.validSlots = new Set(Object.values(LoadoutSlots));
+LoadoutEquipment.validSlots = ValidLoadoutSlots
 LoadoutEquipment.formatInvalidSlots = (errorSlots) => `Invalid slots requested for loadout: ${errorSlots.join(", ")}`;
 LoadoutEquipment.formatInvalidEquip = (slot) => `Attempted to equip item in invalid loadout slot: ${slot}`;
 LoadoutEquipment.formatInvalidUnequip = (slot) => `Attempt to unequip item from invalid loadout slot: ${slot}`;
@@ -106,5 +110,6 @@ LoadoutEquipment.equipItem = function(slot, item) {
 
 export {
     EquipmentSlots, LoadoutSlots,
-    Equipment, LoadoutEquipment
+    Equipment, LoadoutEquipment,
+    ValidEquipmentSlots, ValidLoadoutSlots
 };
