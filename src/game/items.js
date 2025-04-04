@@ -2,6 +2,42 @@ import {
     EquipmentSlots, LoadoutSlots,
     ValidEquipmentSlots, ValidLoadoutSlots
 } from './equipment';
+import { ItemCategories } from './constants';
+
+let itemData = null;
+
+const loadItemsFromJSON = (json) => itemData = json.map(hydrateItem);
+
+const getAllItems = () => {
+    if (!itemData) {
+        throw new Error("Item data not loaded.");
+    }
+
+    return itemData;
+};
+
+const getItemByName = (name) => {
+    if (!itemData) {
+        throw new Error("Item data not loaded.");
+    }
+
+    return itemData.find(item => item.name === name);
+};
+
+const hydrateItem = (raw) => {
+    switch (raw.category) {
+        case ItemCategories.ACCESSORY:
+            return Accessory.create(raw);
+        case ItemCategories.ARMOR:
+            return Armor.create(raw);
+        case ItemCategories.CONSUMABLE:
+            return Consumable.create(raw);
+        case ItemCategories.WEAPON:
+            return Weapon.create(raw);
+        default:
+            throw new Error(`Unknown item category: ${raw.category}`);
+    }
+};
 
 const validateAllowedSlots = (allowedSlots) => {
     const validSlots = new Set([
