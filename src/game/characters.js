@@ -5,6 +5,9 @@ import {
 import { Inventory } from './inventory';
 import { DEFAULT_STATS } from './stats';
 
+const { HEAD, BODY, HANDS, WAIST, LEGS, FEET, LEFT_RING, RIGHT_RING, NECK } = EquipmentSlots;
+const { MAIN_HAND, OFF_HAND, AMMO } = LoadoutSlots;
+
 const Character = {    
     // #region Object Creation
     create(properties = {}) {
@@ -26,10 +29,8 @@ const Character = {
 
         this.inventory = inventory || Inventory.create(this);
 
-        const { HEAD, BODY, HANDS, WAIST, LEGS, FEET, LEFT_RING, RIGHT_RING, NECK } = EquipmentSlots;
         this.equipment = Equipment.generateSlots([ HEAD, BODY, HANDS, WAIST, LEGS, FEET, LEFT_RING, RIGHT_RING, NECK ]);
 
-        const { MAIN_HAND, OFF_HAND, AMMO } = LoadoutSlots;
         this.loadouts = [
             LoadoutEquipment.generateSlots([ MAIN_HAND, OFF_HAND, AMMO ]),
             LoadoutEquipment.generateSlots([ MAIN_HAND, OFF_HAND, AMMO ])
