@@ -1,8 +1,7 @@
 import { deepCopy } from "../utils/copy";
-import { getRandomElement, getRandomIndex } from "../utils/random";
-
 import { DamageTypes } from "./damage";
 import { EffectTypes } from "./effects";
+import { MaterialTypes } from "./materials";
 import { StatusTypes } from "./statuses";
 
 const WeaponClasses = {
@@ -23,6 +22,44 @@ const WeaponTypes = {
     CROSSBOW: "crossbow",
     STAFF: "staff",
     WAND: "wand"
+};
+
+const WeaponMaterialPools = {
+    [WeaponTypes.SWORD]: [
+        MaterialTypes.WROUGHT_IRON, MaterialTypes.BONE, MaterialTypes.BRONZE, MaterialTypes.IRON,
+        MaterialTypes.STEEL, MaterialTypes.MITHRIL, MaterialTypes.STARSTEEL, MaterialTypes.ADAMANTINE
+    ],
+    [WeaponTypes.AXE]: [
+        MaterialTypes.WROUGHT_IRON, MaterialTypes.BRONZE, MaterialTypes.IRON, MaterialTypes.STEEL,
+        MaterialTypes.MITHRIL, MaterialTypes.STARSTEEL, MaterialTypes.ADAMANTINE
+    ],
+    [WeaponTypes.DAGGER]: [
+        MaterialTypes.WROUGHT_IRON, MaterialTypes.BONE, MaterialTypes.BRONZE, MaterialTypes.IRON,
+        MaterialTypes.STEEL, MaterialTypes.MITHRIL, MaterialTypes.STARSTEEL, MaterialTypes.ADAMANTINE
+    ],
+    [WeaponTypes.SPEAR]: [
+        MaterialTypes.WROUGHT_IRON, MaterialTypes.BONE, MaterialTypes.BRONZE, MaterialTypes.IRON,
+        MaterialTypes.STEEL, MaterialTypes.MITHRIL, MaterialTypes.STARSTEEL, MaterialTypes.ADAMANTINE
+    ],
+    [WeaponTypes.MACE]: [
+        MaterialTypes.WROUGHT_IRON, MaterialTypes.BONE, MaterialTypes.BRONZE, MaterialTypes.IRON,
+        MaterialTypes.STEEL, MaterialTypes.MITHRIL, MaterialTypes.STARSTEEL, MaterialTypes.ADAMANTINE
+    ],
+    [WeaponTypes.BOW]: [
+        MaterialTypes.WOOD, MaterialTypes.ELDER_WOOD
+    ],
+    [WeaponTypes.CROSSBOW]: [
+        MaterialTypes.WOOD, MaterialTypes.ELDER_WOOD, MaterialTypes.WROUGHT_IRON, MaterialTypes.BRONZE,
+        MaterialTypes.IRON, MaterialTypes.STEEL, MaterialTypes.MITHRIL, MaterialTypes.STARSTEEL, MaterialTypes.ADAMANTINE
+    ],
+    [WeaponTypes.STAFF]: [
+        MaterialTypes.ELDER_WOOD, MaterialTypes.CRYSTAL, MaterialTypes.MITHRIL, MaterialTypes.STARSTEEL,
+        MaterialTypes.ADAMANTINE, MaterialTypes.BONE, MaterialTypes.NECROTIC_BONE, MaterialTypes.ANCIENT_BONE
+    ],
+    [WeaponTypes.WAND]: [
+        MaterialTypes.CRYSTAL, MaterialTypes.ELDER_WOOD, MaterialTypes.MITHRIL, MaterialTypes.STARSTEEL, MaterialTypes.ADAMANTINE,
+        MaterialTypes.BONE, MaterialTypes.NECROTIC_BONE, MaterialTypes.ANCIENT_BONE
+    ]
 };
 
 const WeaponProperties = {
@@ -61,51 +98,7 @@ const AllowedMagicEffects = {
     [WeaponTypes.STAFF]: Object.values(MagicEffects) // Staves can roll anything
 };
 
-const WeaponRarities = {
-    COMMON: {
-        name: "Common",
-        baseMultiplier: 1,
-        magicCount: 0
-    },
-    UNCOMMON: {
-        name: "Uncommon",
-        baseMultiplier: 1.1,
-        magicCount: 1
-    },
-    RARE: {
-        name: "rare",
-        baseMultiplier: 1.25,
-        magicCount: 2
-    },
-    EPIC: {
-        name: "Epic",
-        baseMultiplier: 1.5,
-        magicCount: 3
-    },
-    LEGENDARY: {
-        name: "Legendary",
-        baseMultiplier: 2,
-        magicCount: 4
-    }
+export {
+    AllowedMagicEffects,
+    WeaponMaterialPools, WeaponTypes
 };
-
-const generateMagicWeapon = (baseWeapon, rarity) => {
-    if (!rarity.magicCount) return baseWeapon; // No magic if Common
-
-    let magicEffects = [];
-    let possibleEffects = deepCopy(AllowedMagicEffects[baseWeapon.type] || []);
-
-    while (magicEffects.length < rarity.magicCount && possibleEffects.length > 0) {
-        const effectIndex = getRandomIndex(possibleEffects);
-        magicEffects.push(possibleEffects.splice(effectIndex, 1)[0]); // Remove to prevent duplicates
-    }
-
-    return {
-        ...baseWeapon,
-        baseDamage: Math.floor(baseWeapon.baseDamage * rarity.baseMultiplier),
-        rarity: rarity.name,
-        magicalEffects: magicEffects
-    };
-};
-
-export { WeaponTypes };

@@ -10,4 +10,6 @@ const getRandomIndex = (array) => {
     return Math.floor(Math.random() * array.length);
 };
 
-export { getRandomElement, getRandomIndex }
+const getRandomInRange = ([ min, max ]) => Math.floor(Math.random() * (max - min + 1)) + min;
+
+export { getRandomElement, getRandomIndex, getRandomInRange };
