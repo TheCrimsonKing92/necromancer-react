@@ -13,8 +13,9 @@ const Character = {
     create(properties = {}) {
         return Object.create(this).init(properties);
     },
-    init({ id, name = 'Unnamed', team = 'Unaligned', stats = {}, statusEffects = [], inventory }) {
+    init({ id, characterClass="Commoner", name = 'Unnamed', team = 'Unaligned', stats = {}, statusEffects = [], inventory }) {
         this.id = id;
+        this.characterClass = characterClass;
         this.name = name;
         this.team = team;
 
@@ -148,11 +149,12 @@ const Character = {
 
 const Player = Object.create(Character);
 
-Player.init = function({ id, name, stats, statusEffects, inventory }) {
+Player.init = function({ id, characterClass, name, stats, statusEffects, inventory }) {
     Character.init.call(
         this,
         {
             id,
+            characterClass,
             name,
             team: "player",
             stats,
@@ -170,11 +172,12 @@ Player.create = function(properties = {}) {
 
 const Ally = Object.create(Character);
 
-Ally.init = function({ id, name, stats, statusEffects, inventory }) {
+Ally.init = function({ id, characterClass, name, stats, statusEffects, inventory }) {
     Character.init.call(
         this,
         {
             id,
+            characterClass,
             name,
             team: "allies",
             stats,
@@ -196,11 +199,12 @@ Ally.chooseAction = function() {
 
 const Enemy = Object.create(Character);
 
-Enemy.init = function({ id, name, stats, statusEffects, inventory }) {
+Enemy.init = function({ id, characterClass, name, stats, statusEffects, inventory }) {
     Character.init.call(
         this,
         {
             id,
+            characterClass,
             name,
             team: "enemies",
             stats,
@@ -223,4 +227,4 @@ Enemy.chooseAction = function() {
     return this.isAlive() ? "attack" : "none";
 };
 
-export { Character, Ally, Enemy}
+export { Character, Player, Ally, Enemy}
