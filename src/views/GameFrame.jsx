@@ -26,7 +26,7 @@ const GameFrame = ({ character = null, children }) => (
                 }}
             >
                 <h5 style={{ margin: '0 0 0.5rem 0' }}>{ character.name }</h5>
-                <p style={{ margin: 0, fontSize: '0.75rem' }}>Level 1 { character.characterClass }</p>
+                <p style={{ margin: 0, fontSize: '0.75rem' }}>Level {character.level} { character.characterClass }</p>
             </div>
         )}
         <div style={ character ? { paddingTop: '4rem' } : {} }>{ children }</div>

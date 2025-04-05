@@ -14,12 +14,29 @@ export function createPlayerInstance(data) {
     });
 };
 
-export function createThug(name = "Common Thug") {
+export function createThug({
+    name = "Common Thug",
+    level = 1
+}) {
+    const stats = {
+        health: 15,
+        maxHealth: 15,
+        attack: 3,
+        defense: 2
+    };
+
+    if (level > 1) {
+        Object.keys(stats).forEach(stat => stats[stat] = Math.round(stats[stat] * Math.pow(1.2, level)));
+    }
+    
+    console.log('Generated thug stats:', stats);
+
     return Enemy.create({
         id: 'enemy-' + generateUniqueId(),
         name,
         characterClass: 'Thug',
-        stats: { health: 15, maxHealth: 15, attack: 3, defense: 2 }
+        stats,
+        level
         // TODO: Default Thug inventory
-    })
+    });
 };

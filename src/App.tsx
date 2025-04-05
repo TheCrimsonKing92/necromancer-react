@@ -33,7 +33,7 @@ function App() {
   };
 
   const onEnterBattle = () => {
-    const enemyGroup = [ createThug('Maritius'), createThug('Ronald') ];
+    const enemyGroup = [ createThug({ name: 'Maritius', level: 10 }), createThug({ name: 'Ronald', level: 5 }) ];
     setEnemies(enemyGroup);
     setView("battleScene");
   };

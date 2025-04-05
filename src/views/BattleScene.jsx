@@ -13,7 +13,7 @@ const BattleScene = ({ player, enemies, onBattleEnd }) => (
             <h3>Enemies:</h3>
             { enemies.map((enemy, index) => (
                 <div key={index}>
-                    <p>{enemy.name} the {enemy.characterClass}</p>
+                    <p>{enemy.name} (Level {enemy.level} {enemy.characterClass})</p>
                 </div>
             ))}
         </div>
