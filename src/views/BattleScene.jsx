@@ -7,7 +7,7 @@ const BattleScene = ({ player, enemies, onBattleEnd }) => (
         <h2>Battle!</h2>
         <div>
             <h3>Stats:</h3>
-            <p>{player.stats.health} / {player.stats.maxHealth}</p>
+            <p>Health: {player.stats.health} / {player.stats.maxHealth}</p>
         </div>
         <div>
             <h3>Enemies:</h3>
