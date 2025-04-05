@@ -13,7 +13,7 @@ const Character = {
     create(properties = {}) {
         return Object.create(this).init(properties);
     },
-    init({ id, characterClass="Commoner", name = 'Unnamed', team = 'Unaligned', stats = {}, statusEffects = [], inventory }) {
+    init({ id, characterClass="Commoner", name = 'Unnamed', team = 'Unaligned', stats = {}, statusEffects = [], inventory, level = 1, experience = 0 }) {
         this.id = id;
         this.characterClass = characterClass;
         this.name = name;
@@ -29,6 +29,9 @@ const Character = {
         this.skills = {};
 
         this.inventory = inventory || Inventory.create(this);
+
+        this.level = level;
+        this.experience = experience;
 
         this.equipment = Equipment.generateSlots([ HEAD, BODY, HANDS, WAIST, LEGS, FEET, LEFT_RING, RIGHT_RING, NECK ]);
 
@@ -149,7 +152,7 @@ const Character = {
 
 const Player = Object.create(Character);
 
-Player.init = function({ id, characterClass, name, stats, statusEffects, inventory }) {
+Player.init = function({ id, characterClass, name, stats, statusEffects, inventory, level, experience }) {
     Character.init.call(
         this,
         {
@@ -159,7 +162,9 @@ Player.init = function({ id, characterClass, name, stats, statusEffects, invento
             team: "player",
             stats,
             statusEffects,
-            inventory
+            inventory,
+            level,
+            experience
         }
     );
 
@@ -172,7 +177,7 @@ Player.create = function(properties = {}) {
 
 const Ally = Object.create(Character);
 
-Ally.init = function({ id, characterClass, name, stats, statusEffects, inventory }) {
+Ally.init = function({ id, characterClass, name, stats, statusEffects, inventory, level, experience }) {
     Character.init.call(
         this,
         {
@@ -182,7 +187,9 @@ Ally.init = function({ id, characterClass, name, stats, statusEffects, inventory
             team: "allies",
             stats,
             statusEffects,
-            inventory
+            inventory,
+            level,
+            experience
         }
     );
 
@@ -199,7 +206,7 @@ Ally.chooseAction = function() {
 
 const Enemy = Object.create(Character);
 
-Enemy.init = function({ id, characterClass, name, stats, statusEffects, inventory }) {
+Enemy.init = function({ id, characterClass, name, stats, statusEffects, inventory, level, experience }) {
     Character.init.call(
         this,
         {
@@ -209,7 +216,9 @@ Enemy.init = function({ id, characterClass, name, stats, statusEffects, inventor
             team: "enemies",
             stats,
             statusEffects,
-            inventory
+            inventory,
+            level,
+            experience
         }
     );
 
