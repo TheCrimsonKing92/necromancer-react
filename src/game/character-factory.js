@@ -28,8 +28,6 @@ export function createThug({
     if (level > 1) {
         Object.keys(stats).forEach(stat => stats[stat] = Math.round(stats[stat] * Math.pow(1.2, level)));
     }
-    
-    console.log('Generated thug stats:', stats);
 
     return Enemy.create({
         id: 'enemy-' + generateUniqueId(),

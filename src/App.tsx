@@ -38,6 +38,9 @@ function App() {
     setView("battleScene");
   };
 
+  const onBattleUpdate = (action, target) => {
+  };
+
   const onBattleEnd = () => {
     alert("Battle finished (placeholder)");
     setView("innScene");
@@ -58,7 +61,7 @@ function App() {
       content = <OutdoorConfrontation character={character} onEnterBattle={onEnterBattle} />;
       break;
     case "battleScene":
-      content = <BattleScene player={character} enemies={enemies} onBattleEnd={onBattleEnd} />;
+      content = <BattleScene player={character} enemies={enemies} onBattleEnd={onBattleEnd} onBattleUpdate={onBattleUpdate} />;
       break;
     default:
       content = <div>Unknown view: {view}</div>;
